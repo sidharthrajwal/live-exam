@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\StudentProfile;
 use Illuminate\Support\Facades\Storage;
+//use Illuminate\Support\Facades\Cache;
 
 class StudentProfileController extends Controller
 {
@@ -17,7 +18,10 @@ class StudentProfileController extends Controller
     {
         $user = User::find(auth()->user()->id);
         $student_profile = StudentProfile::where('user_id', $user->id)->first();
-        return view('Dashboard.Students.students-profile', compact('user', 'student_profile'));
+
+        Cache::put('exam_start_time', now(), 3600);
+
+        return view('Dashboard.Students.students-profile', compact('user', 'student_profile', 'values'));
     }
 
     /**
@@ -52,6 +56,8 @@ class StudentProfileController extends Controller
     {
         $user = User::find(auth()->user()->id);
         $student_profile = StudentProfile::where('user_id', $user->id)->first();
+
+        
         return view('Dashboard.Students.students-profile', compact('user', 'student_profile'));
     }
 

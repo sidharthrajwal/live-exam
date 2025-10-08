@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(StudentProfile::class);
     }
+
+    public function examRoom()
+    {
+        return $this->belongsToMany(ExamList::class, 'exam_user');
+    }
 }

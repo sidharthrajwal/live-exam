@@ -18,8 +18,7 @@
             <!-- Navbar Start -->
             @include('layouts.dashboard.navbar-content')  
             <!-- Navbar End -->
-
-
+             
             <!-- Form Start -->
             <form action="{{ route('profile.update', auth()->user()->id.'edit') }}" method="post" enctype="multipart/form-data">
             @if(session('success'))

@@ -22,7 +22,7 @@
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Exams</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="{{url('exam')}}" class="dropdown-item"> Exam Room</a>
-                            <a href="{{url('exam')}}" class="dropdown-item">All Exam</a>
+                            <a href="{{url('all-exam')}}" class="dropdown-item">All Exam</a>
                             <a href="{{url('exam')}}" class="dropdown-item">Other Exam</a>
                         </div>
                     </div>

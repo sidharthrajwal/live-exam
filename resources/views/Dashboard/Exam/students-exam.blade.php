@@ -18,93 +18,41 @@
         @include('layouts.dashboard.navbar-content')
         <!-- Navbar End -->
 
-        <!-- Page Header -->
-        <div class="container-fluid pt-4 px-4">
-            <div class="row g-4">
-                <div class="col-12">
-                    <div class="bg-light rounded p-3 p-md-4 d-flex align-items-center justify-content-between flex-wrap">
-                        <div>
-                            <h5 class="mb-1">Exams</h5>
-                            <small class="text-muted">Find your active, upcoming, and completed exams</small>
-                        </div>
-                        <div class="d-flex gap-2 mt-3 mt-md-0">
-                            <button class="btn btn-outline-primary btn-sm"><i class="fa fa-sync me-2"></i>Refresh</button>
-                            <button class="btn btn-primary btn-sm"><i class="fa fa-plus me-2"></i>New Registration</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  
 
-        <!-- Exams List -->
+      
+        <!-- Slot Booking (Read-only) -->
         <div class="container-fluid pt-2 px-4">
             <div class="row g-4">
                 <div class="col-12">
-                    <div class="bg-light rounded p-3 p-md-4">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <h6 class="mb-0">Active & Upcoming Exams</h6>
-                            <div class="d-flex gap-2">
-                                <select class="form-select form-select-sm" style="width:auto">
-                                    <option selected>All Subjects</option>
-                                    <option>Mathematics</option>
-                                    <option>Physics</option>
-                                    <option>Chemistry</option>
-                                </select>
-                                <select class="form-select form-select-sm" style="width:auto">
-                                    <option selected>Status: All</option>
-                                    <option>Active</option>
-                                    <option>Upcoming</option>
-                                    <option>Completed</option>
-                                </select>
+                    <div class="bg-white border rounded p-3 p-md-4">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+                            <div>
+                                <h6 class="mb-1">Slot Booking (Read-only)</h6>
+                                <small class="text-muted">Visual layout of 100 slots. Booked slots are highlighted.</small>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-success"><i class="fa fa-check me-1"></i>Booked</span>
+                                <span class="badge bg-secondary"><i class="fa fa-minus me-1"></i>Unbooked</span>
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table align-middle table-hover mb-0">
-                                <thead>
-                                    <tr class="text-muted">
-                                        <th>Exam</th>
-                                        <th>Subject</th>
-                                        <th>Schedule</th>
-                                        <th>Duration</th>
-                                        <th>Status</th>
-                                        <th class="text-end">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="badge bg-primary me-3"><i class="fa fa-bolt"></i></span>
-                                                <div>
-                                                    <div class="fw-semibold">Mid-Term Assessment</div>
-                                                    <small class="text-muted">Code: MATH-202</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Mathematics</td>
-                                        <td>Today, 3:00 PM</td>
-                                        <td>60 mins</td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td class="text-end"><a href="#exam-room" class="btn btn-sm btn-primary">Enter Exam</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="badge bg-warning text-dark me-3"><i class="fa fa-clock"></i></span>
-                                                <div>
-                                                    <div class="fw-semibold">Chapter Quiz</div>
-                                                    <small class="text-muted">Code: PHY-110</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Physics</td>
-                                        <td>Tomorrow, 10:00 AM</td>
-                                        <td>30 mins</td>
-                                        <td><span class="badge bg-warning text-dark">Upcoming</span></td>
-                                        <td class="text-end"><button class="btn btn-sm btn-outline-primary" disabled>Opens Soon</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+
+                        <!-- Layout only: 10x10 static grid (no logic) -->
+                        <div class="d-grid" style="grid-template-columns: repeat(10, minmax(0, 1fr)); gap: .25rem;">
+                            @for($i = 1; $i <= 100; $i++)
+                                <div
+                                    class="text-center small py-1 rounded border user-select-none bg-light text-muted border-secondary"
+                                    style="font-size: .75rem; line-height: 1.1;"
+                                    title="Slot {{ $i }}"
+                                    aria-label="Slot {{ $i }}"
+                                >
+                                    {{ $i }}
+                                </div>
+                            @endfor
+                        </div>
+
+                        <div class="mt-2">
+                            <small class="text-muted">This is a read-only display. Slot states cannot be changed here.</small>
                         </div>
                     </div>
                 </div>

@@ -51,6 +51,13 @@ Route::get('/exam', function () {
     
     });
 
+Route::get('all-exam', function()
+{
+
+return view('Dashboard.Exam.all-exam');
+
+});
+
 Route::get('/result', function () {
 
     return view('Dashboard.Exam.result');
