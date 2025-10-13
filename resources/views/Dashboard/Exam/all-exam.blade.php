@@ -106,6 +106,7 @@
 
         <!-- Enter Exam Code Modal -->
         <div class="modal fade" id="examCodeModal" tabindex="-1" aria-hidden="true">
+<form action="/"  method="post">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -119,11 +120,12 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                        <button type="button" class="btn btn-secondary" >Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </div>
             </div>
+</form>
         </div>
 
         </div>
