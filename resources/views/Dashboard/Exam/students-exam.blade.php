@@ -68,11 +68,11 @@
                         <div class="bg-light border-bottom p-3 p-md-4 d-flex flex-wrap align-items-center justify-content-between">
                             <div>
                                 <h6 class="mb-1">Exam Room: Mid-Term Assessment</h6>
-                                <small class="text-muted">Subject: Mathematics · Code: MATH-202</small>
+                                <small class="text-muted">Subject:  {{ $exam_room_subject_name}} · Code: {{ $exam_room_code }}</small>
                             </div>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge bg-secondary p-2"><i class="fa fa-question-circle me-1"></i> 20 Questions</span>
-                                <span class="badge bg-primary p-2" id="exam-timer" data-duration="3600"><i class="fa fa-hourglass-half me-1"></i> 60:00</span>
+                                <span class="badge bg-primary p-2" id="exam-timer" data-duration="3600"><i class="fa fa-hourglass-half me-1"></i> {{ $exam_room_duration}}</span>
                                 <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#leaveExamModal"><i class="fa fa-sign-out-alt me-2"></i>Leave</button>
                             </div>
                         </div>

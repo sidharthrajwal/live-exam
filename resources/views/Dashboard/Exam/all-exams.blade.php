@@ -82,8 +82,23 @@
                                         <td>Mathematics</td>
                                         <td>Today, 3:00 PM</td>
                                         <td>60 mins</td>
-                                        <td><span class="badge bg-success">Active</span></td>
-                                        <td class="text-end"><button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#examCodeModal">Enter Exam</button></td>
+                                        <td><span class="badge bg-success status-active">Active</span>
+                                        @if ($exam_room_status === 'joined')
+
+                                        <span class="badge bg-danger status-joined">joined</span>
+                                        @endif
+                                    
+                                    </td>
+                                                                        
+                                        <td class="text-end">
+                                        @if (!$exam_room_status === 'joined') <button type="button" class="btn btn-sm btn-primary enter-exam" 
+                                                    data-bs-toggle="modal" data-bs-target="#examCodeModal">
+                                                Enter Exam
+                                            </button>
+                                            @endif
+                                        </td>
+
+
                                     </tr>
                                     <tr>
                                         <td>
@@ -105,12 +120,16 @@
                             </table>
 
         <!-- Enter Exam Code Modal -->
-         <form action="{{ route('join-slot') }}" method="POST">
+         <form  id="examCodeForm" method="POST">
             @csrf
         <div class="modal fade" id="examCodeModal" tabindex="-1" aria-hidden="true">
-<form action="/"  method="post">
+
+      
+
             <div class="modal-dialog modal-dialog-centered">
+            
                 <div class="modal-content">
+                <span id="status-msg"></span>
                     <div class="modal-header">
                         <h6 class="modal-title">Enter Exam Code</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -123,14 +142,16 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                        <button type="submit" class="btn btn-primary" >Save</button>
                     </div>
                 </div>
             </div>
-</form>
         </div>
         </form>
         </div>
     </div>
 </div>
+
+
+@vite(['resources/js/exam-room.js'])
 @endsection

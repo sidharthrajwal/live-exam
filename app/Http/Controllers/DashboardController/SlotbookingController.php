@@ -12,7 +12,10 @@ class SlotbookingController extends Controller
 {
     public function index()
     {
-        return view('Dashboard.Exam.all-exam');
+        $get_current_student = auth()->user()->id;
+        $exam_room_status = ExamRoom::where('user_id', $get_current_student)->value('status');
+       
+        return view('Dashboard.Exam.all-exams', compact('exam_room_status'));
     }
     public function joinSlot(Request $request)
     {
@@ -21,17 +24,25 @@ class SlotbookingController extends Controller
         $exam_id = $data['exam_code']; 
         
         $exam = ExamList::where('subject_code', $exam_id)->first();
-        $get_exam_id = $exam->id;
+
+        if (is_null($exam)) {
+            return response()->json(array('msg'=> 'Exam not found'), 404);
+        }
         
+        $get_exam_id = $exam->id;
+              
+ 
         $examroom = ExamRoom::updateOrCreate([
             'exam_id' => $get_exam_id,
             'user_id' => $user_id,
-            'score' => 0,
-            'status' => 'active',    
+            'exam_score' => 0,
+            'status' => 'joined',    
            
         ]);
 
-        return back()->with('success', 'Join slot successfully');
+       
+
+        return response()->json(array('status'=> 'joined'), 200);
     
     }
-}
+}   

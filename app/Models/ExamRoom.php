@@ -11,11 +11,18 @@ class ExamRoom extends Model
     protected $fillable = [
         'exam_id',
         'user_id',
-        'password',
-        'score',
+        'exam_score',
         'status',
     ];
 
 
-   
+    public function exam()
+    {
+        return $this->belongsTo(ExamList::class, 'exam_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

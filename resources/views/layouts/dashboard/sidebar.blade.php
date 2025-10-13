@@ -21,9 +21,9 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Exams</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="{{url('exam')}}" class="dropdown-item"> Exam Room</a>
-                            <a href="{{url('all-exam')}}" class="dropdown-item">All Exam</a>
-                            <a href="{{url('exam')}}" class="dropdown-item">Other Exam</a>
+                            <a href="{{url('examroom')}}" class="dropdown-item"> Exam Room</a>
+                            <a href="{{url('all-exams')}}" class="dropdown-item">All Exam</a>
+                         
                         </div>
                     </div>
                     <a href="{{url('result')}}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Results</a>

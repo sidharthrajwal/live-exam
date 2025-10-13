@@ -23,5 +23,8 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "dependencies": {
+        "jquery": "^3.7.1"
+    }
 }

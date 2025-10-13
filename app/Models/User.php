@@ -53,8 +53,8 @@ class User extends Authenticatable
         return $this->hasOne(StudentProfile::class);
     }
 
-    public function examRoom()
+    public function user_for_room()
     {
-        return $this->belongsToMany(ExamList::class, 'exam_user');
+        return $this->belongsToMany(ExamList::class, 'examroom', 'user_id', 'exam_id');
     }
 }

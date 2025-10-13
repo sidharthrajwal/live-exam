@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController\LoginController;
 use App\Http\Controllers\DashboardController\RegisterController;
 use App\Http\Controllers\DashboardController\StudentProfileController;
 use App\Http\Controllers\DashboardController\SlotbookingController;
+use App\Http\Controllers\DashboardController\ExamRoomController;
 
 Route::get('/', function () {
     return view('FrontView.welcome');
@@ -45,19 +46,12 @@ Route::get('/dashboard', function () {
     
     });
 
+    Route::get('/examroom', [ExamRoomController::class, 'index'])->name('examroom');
+    Route::post('/examroom', [ExamRoomController::class, 'joinSlot'])->name('examroom');  
 
-Route::get('/exam', function () {
+    Route::get('/all-exams', [SlotbookingController::class, 'index'])->name('all-exams');
+    Route::post('/all-exams', [SlotbookingController::class, 'joinSlot'])->name('all-exams');  
 
-    return view('Dashboard.Exam.students-exam');
-    
-    });
-
-Route::get('all-exam', function()
-{
-
-return view('Dashboard.Exam.all-exam');
-
-});
 
 Route::get('/result', function () {
 

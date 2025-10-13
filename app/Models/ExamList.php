@@ -19,10 +19,10 @@ class ExamList extends Model
 
     ];
 
-    protected function examRoom() 
+    protected function exams_for_room() 
     {
 
-        return $this->belongsToMany(User::class, 'exam_user');
+        return $this->belongsToMany(User::class, 'examroom', 'exam_id', 'user_id');
 
     } 
 }
