@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController\LoginController;
 use App\Http\Controllers\DashboardController\RegisterController;
 use App\Http\Controllers\DashboardController\StudentProfileController;
+use App\Http\Controllers\DashboardController\SlotbookingController;
 
 Route::get('/', function () {
     return view('FrontView.welcome');
@@ -43,7 +44,7 @@ Route::get('/dashboard', function () {
     return view('Dashboard.Students.students-dashboard');
     
     });
-});
+
 
 Route::get('/exam', function () {
 
@@ -81,3 +82,8 @@ Route::get('/help-center', function () {
     return view('Dashboard.Students.students-help-center');
     
     });
+
+    Route::get('/join-slot', [SlotbookingController::class, 'index'])->name('join-slot');
+    Route::post('/join-slot', [SlotbookingController::class, 'joinSlot'])->name('join-slot');   
+
+});

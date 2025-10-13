@@ -105,6 +105,8 @@
                             </table>
 
         <!-- Enter Exam Code Modal -->
+         <form action="{{ route('join-slot') }}" method="POST">
+            @csrf
         <div class="modal fade" id="examCodeModal" tabindex="-1" aria-hidden="true">
 <form action="/"  method="post">
             <div class="modal-dialog modal-dialog-centered">
@@ -116,18 +118,18 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="examCodeInput" class="form-label">Exam Code</label>
-                            <input type="text" id="examCodeInput" class="form-control" placeholder="Enter your exam code" />
+                            <input type="text" name="exam_code" id="examCodeInput" class="form-control" placeholder="Enter your exam code" />
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" >Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
                     </div>
                 </div>
             </div>
 </form>
         </div>
-
+        </form>
         </div>
     </div>
 </div>
