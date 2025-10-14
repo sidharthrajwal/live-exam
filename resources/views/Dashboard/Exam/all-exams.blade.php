@@ -35,6 +35,8 @@
             </div>
         </div>
   <!-- Exams List -->
+
+  
   <div class="container-fluid pt-2 px-4">
             <div class="row g-4">
                 <div class="col-12">
@@ -69,19 +71,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach ($exam_list as $exam)
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <span class="badge bg-primary me-3"><i class="fa fa-bolt"></i></span>
                                                 <div>
-                                                    <div class="fw-semibold">Mid-Term Assessment</div>
-                                                    <small class="text-muted">Code: MATH-202</small>
+                                                    <div class="fw-semibold">{{ $exam->subject_name }}</div>
+                                                    <small class="text-muted">Code: {{ $exam->subject_code }}</small>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>Mathematics</td>
-                                        <td>Today, 3:00 PM</td>
-                                        <td>60 mins</td>
+                                        <td>{{ $exam->subject_name }}</td>
+                                        <td>{{ $exam->start_date }}</td>
+                                        <td>{{ $exam->duration }}</td>
                                         <td><span class="badge bg-success status-active">Active</span>
                                         @if ($exam_room_status === 'joined')
 
@@ -91,7 +94,8 @@
                                     </td>
                                                                         
                                         <td class="text-end">
-                                        @if (!$exam_room_status === 'joined') <button type="button" class="btn btn-sm btn-primary enter-exam" 
+                                            {{ $exam_room_status }}
+                                        @if (!$exam_room_status == 'joined') <button type="button" class="btn btn-sm btn-primary enter-exam" 
                                                     data-bs-toggle="modal" data-bs-target="#examCodeModal">
                                                 Enter Exam
                                             </button>
@@ -100,22 +104,8 @@
 
 
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="badge bg-warning text-dark me-3"><i class="fa fa-clock"></i></span>
-                                                <div>
-                                                    <div class="fw-semibold">Chapter Quiz</div>
-                                                    <small class="text-muted">Code: PHY-110</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Physics</td>
-                                        <td>Tomorrow, 10:00 AM</td>
-                                        <td>30 mins</td>
-                                        <td><span class="badge bg-warning text-dark">Upcoming</span></td>
-                                        <td class="text-end"><button class="btn btn-sm btn-outline-primary" disabled>Opens Soon</button></td>
-                                    </tr>
+                                    @endforeach
+                                   
                                 </tbody>
                             </table>
 

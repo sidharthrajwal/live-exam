@@ -12,6 +12,7 @@ class ExamRoom extends Model
         'exam_id',
         'user_id',
         'exam_score',
+        'subject_code',
         'status',
     ];
 

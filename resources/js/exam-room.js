@@ -23,9 +23,14 @@ $(function() {
                   $('.enter-exam').remove();
                   $('#examCodeModal').remove();
                   $('.modal-backdrop.fade').remove();
+                  window.location.href = '/examroom';
                 }
             },
             error: function(xhr, status, error) {
+                console.log(error);
+              if(error == 'Not Found'){
+                $('#status-msg').html('<div class="alert alert-danger">Exam Not Found</div>');
+              }
                 console.error("AJAX Error:", status, error, xhr.responseText);
             }
         });

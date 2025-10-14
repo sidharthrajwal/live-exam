@@ -24,7 +24,7 @@ class LoginController extends Controller
     
    
        $validate   =    $request->validate([
-   'terms'   => 'required'
+        'terms'   => 'required'
        ]);
 
       $credentials = $request->validate([

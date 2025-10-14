@@ -19,8 +19,27 @@
         <!-- Navbar End -->
 
   
+@if(!$exam_room_status == 'joined')
+    
+<div class="alert alert-primary border-0 d-flex align-items-center justify-content-center mb-4 shadow-lg position-fixed top-50 start-50 translate-middle" role="alert" 
+     style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); min-width: 400px; max-width: 90vw; z-index: 1050; border-left: 4px solid #2196f3 !important;">
+    <div class="text-center">
+        <div class="mb-3">
+            <i class="fa fa-door-open fa-3x text-primary"></i>
+        </div>
+        <h5 class="alert-heading text-primary fw-semibold mb-3">
+            <i class="fa fa-sign-in-alt me-2"></i>Join Exam Room Required
+        </h5>
+        <p class="mb-3 text-dark">
+            Please first join the room by clicking on the join button.
+        </p>
+        <a href="{{ url('all-exams') }}" class="btn btn-primary px-4 py-2">
+            <i class="fa fa-sign-in-alt me-2"></i>Join Room Now
+        </a>
+    </div>
+</div>
 
-      
+@else
         <!-- Slot Booking (Read-only) -->
         <div class="container-fluid pt-2 px-4">
             <div class="row g-4">
@@ -41,7 +60,7 @@
                         <div class="d-grid" style="grid-template-columns: repeat(10, minmax(0, 1fr)); gap: .25rem;">
                             @for($i = 1; $i <= 100; $i++)
                                 <div
-                                    class="text-center small py-1 rounded border user-select-none bg-light text-muted border-secondary"
+                                    class="text-center small py-1 @if($booked_slot_count >= $i) bg-success text-white @else bg-light text-muted @endif rounded border user-select-none   border-secondary"
                                     style="font-size: .75rem; line-height: 1.1;"
                                     title="Slot {{ $i }}"
                                     aria-label="Slot {{ $i }}"
@@ -194,7 +213,7 @@
                 </div>
             </div>
         </div>
-
+    @endif
     </div>
     <!-- Content End -->
 </div>

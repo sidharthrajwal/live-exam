@@ -37,6 +37,8 @@ class RegisterController extends Controller
 
         try {
         $save_data->save();
+        Auth::login($save_data);
+        return redirect()->route('login');
 
     } catch(\Illuminate\Database\QueryException $e){
     
@@ -44,8 +46,6 @@ class RegisterController extends Controller
         return back()->with('duplicateerror', 'Email already exists!');
 
     }
-
-        return view('Dashboard.dashboard-main');  
 
 
     }
