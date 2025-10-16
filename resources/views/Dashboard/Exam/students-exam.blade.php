@@ -19,7 +19,7 @@
         <!-- Navbar End -->
 
   
-@if(!$exam_room_status == 'joined')
+@if(empty($joined_subjects) )
     
 <div class="alert alert-primary border-0 d-flex align-items-center justify-content-center mb-4 shadow-lg position-fixed top-50 start-50 translate-middle" role="alert" 
      style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); min-width: 400px; max-width: 90vw; z-index: 1050; border-left: 4px solid #2196f3 !important;">
@@ -179,6 +179,8 @@
         <!-- Leave Exam Modal -->
         <div class="modal fade" id="leaveExamModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
+                <form action="{{ route('leave-slot') }}" method="POST">
+                @csrf
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title">Leave Exam?</h6>
@@ -189,9 +191,10 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger">Leave</button>
+                        <button type="submit" class="btn btn-danger">Leave</button>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
 

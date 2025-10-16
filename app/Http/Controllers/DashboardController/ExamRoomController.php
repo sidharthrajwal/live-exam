@@ -9,35 +9,47 @@ use Illuminate\Http\Request;
 
 class ExamRoomController extends Controller
 {
-    public function index()
+
+    public $joined_subjects;
+    public function __construct()
     {
         $student_id = auth()->id();
-        $exam_room = ExamRoom::where('user_id', $student_id)->first();
-        if($exam_room){
-            $exam_room_id = ExamList::where('id', $exam_room->exam_id)->first();
+ 
+        $exam_room_status = ExamRoom::where('user_id', $student_id)->get();
+        foreach ($exam_room_status as $room) {
+            if ($room['status'] === 'joined') {
+               $this->joined_subjects[] = $room['subject_code'];
+            }
         }
-        $exam_room_status = null;
+    }
+
+    public function index()
+    {
+        
+        $student_id = auth()->id();
+        $exam_room = ExamRoom::where('user_id', $student_id)->first();
         $exam_room_code = null;
         $exam_room_duration = null;
         $exam_room_subject_name = null;
-    
-        $booked_slot_count = ExamRoom::where('status', 'joined')->where('user_id', $student_id)
-                                     ->count();
+        $joined_subjects = $this->joined_subjects ?? [];
+       
+        $booked_slot_count = null;
 
-    
         if ($exam_room) {
+            $booked_slot_count = ExamRoom::where('status', 'joined')->where('exam_id', $exam_room->exam_id)->count();
             $exam = ExamList::find($exam_room->exam_id);
     
             if ($exam) {
-                $exam_room_status = $exam_room->status;
+                
                 $exam_room_code = $exam->subject_code;
                 $exam_room_duration = sprintf('%02d:00', $exam->exam_duration);
                 $exam_room_subject_name = $exam->subject_name;
             }
         }
     
+    
         return view('Dashboard.Exam.students-exam', compact(
-            'exam_room_status',
+            'joined_subjects',
             'exam_room_code',
             'exam_room_duration',
             'exam_room_subject_name',

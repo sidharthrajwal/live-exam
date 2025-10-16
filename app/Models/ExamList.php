@@ -8,12 +8,14 @@ class ExamList extends Model
 {
     protected $table = 'exams';
 
+
+
     protected $fillable = [
 
         'subject_name',
         'subject_code',
         'exam_duration',
-        'exam_room',
+        // 'exam_room',
         'start_date',
         'status',
 

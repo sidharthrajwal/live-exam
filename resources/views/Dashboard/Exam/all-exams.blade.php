@@ -85,8 +85,9 @@
                                         <td>{{ $exam->subject_name }}</td>
                                         <td>{{ $exam->start_date }}</td>
                                         <td>{{ $exam->duration }}</td>
-                                        <td><span class="badge bg-success status-active">Active</span>
-                                        @if ($exam_room_status === 'joined')
+                                 
+                                        <td><span class="badge @if($exam->status === 'Upcoming') bg-warning @else bg-success @endif status-active">{{ $exam->status }}</span>
+                                        @if (in_array($exam->subject_code, $joined_subjects))
 
                                         <span class="badge bg-danger status-joined">joined</span>
                                         @endif
@@ -94,8 +95,8 @@
                                     </td>
                                                                         
                                         <td class="text-end">
-                                            {{ $exam_room_status }}
-                                        @if (!$exam_room_status == 'joined') <button type="button" class="btn btn-sm btn-primary enter-exam" 
+                                           
+                                        @if (!in_array($exam->subject_code, $joined_subjects)) <button type="button" class="btn btn-sm btn-primary enter-exam" 
                                                     data-bs-toggle="modal" data-bs-target="#examCodeModal">
                                                 Enter Exam
                                             </button>
