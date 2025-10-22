@@ -4,6 +4,9 @@ namespace App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\questions;
+use App\Models\answers;
+use App\Models\ExamList;
 
 class QuestionController extends Controller
 {
@@ -28,19 +31,38 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+
         $question_data = $request->validate([
 
-            'exam_id' => 'required',
+        
             'question' => 'required',
-            'option_a' => 'required',
-            'option_b' => 'required',
-            'option_c' => 'required',
-            'option_d' => 'required',
-            'correct_answer' => 'required',
-            
-          
+            'options.*' => 'required|string|max:255',
+            'correct_option' => 'required',
+
         ]);
+    
+        $question_title = $request->question;
+        $question_options = $request->options;
+        $question_correct_option = $request->correct_option;
+        $question_exam_id = $request->exam_id;
+
+        $question = questions::create([
+
+            'exam_id' => $question_exam_id,
+            'question' => $question_title,
+
+        ]);
+
+        $options = collect($question_options)->map(function($option, $index) use ($question_correct_option) {
+            return [
+                'option_value' => $option,
+                'c_answer' => $index == $question_correct_option ? true : false,
+            ];
+        })->toArray();
+        
+        $question->answers()->createMany($options);
+
+        return redirect()->back()->with('question_success', 'Question created successfully');
     
     }
 
@@ -49,7 +71,8 @@ class QuestionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $question = questions::all();
+        return view('Dashboard.Admin.admin-dashboard', compact('question'));
     }
 
     /**
@@ -57,7 +80,8 @@ class QuestionController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // $question = questions::findOrFail($id);
+        // return view('Dashboard.Admin.admin-dashboard', compact('question'));
     }
 
     /**

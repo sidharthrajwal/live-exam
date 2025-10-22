@@ -89,8 +89,28 @@ Route::get('/help-center', function () {
 
 // Admin Routes
 
-    Route::resource('/admin/dashboard', (AdminController::class))->names('admin.dashboard');
-    Route::resource('/admin/questions', (QuestionController::class))->names('admin.questions');
+ 
+  Route::prefix('admin')->name('admin.')->group(function () {
+
+    Route::get('/dashboard/exam/list', [AdminController::class, 'manageExam'])->name('exam-list');
+
+    Route::resource('/dashboard/exam', (AdminController::class))->names([
+        'index' => 'manage-exam.dashboard',
+        'store' => 'exam.save',
+        'edit' => 'manage-exam.edit',
+        'update' => 'manage-exam.update',
+    ]);
+
+    Route::resource('questions', QuestionController::class)
+        ->names([
+            'index' => 'questions.list',
+            'store' => 'questions.save',
+            'edit' => 'questions.edit',
+            'update' => 'questions.update',
+            'destroy' => 'questions.destroy'
+        ]);
+});
+
 
 
 });

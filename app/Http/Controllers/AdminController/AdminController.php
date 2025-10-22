@@ -21,12 +21,24 @@ class AdminController extends Controller
         return view('Dashboard.Admin.admin-dashboard');
     }
 
+    public function manageExam()
+    {
+    
+        if (!auth()->check() || auth()->user()->role !== 'Admin') {
+            abort(403);
+
+           
+        }
+        $examList = ExamList::all();
+        return view('Dashboard.Admin.exams-list', compact('examList'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
     {
-       dd($request->all());
+     //  dd($request->all());
     }
 
     /**
@@ -58,27 +70,16 @@ class AdminController extends Controller
     ]);
 
     return redirect()->back()->with('success', 'Exam created successfully');
-   
-    // $question = questions::create([
-    //     'exam_id' => $examroom->id,
-    //     'question' => $exam_data['question'],
-    // ]);
-
-    // $question->answers()->create([
-    //     'question_id' => $question->id,
-    //     'option_text' => $exam_data['option'],
-    //     'c_answer' => $exam_data['correct_option'],
-    // ]);
 
 
     }
-
+    
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+  
     }
 
     /**
@@ -86,7 +87,12 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
+    
+    $exam_detail = ExamList::find($id);
+    $questionList = questions::with('answers')->get();
+    return view('Dashboard.Admin.manage-exam', compact('exam_detail', 'questionList'));
+
     }
 
     /**
@@ -94,7 +100,7 @@ class AdminController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        dd($request->all());
     }
 
     /**

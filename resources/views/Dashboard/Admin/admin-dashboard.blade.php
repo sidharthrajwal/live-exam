@@ -10,12 +10,15 @@
         <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
                 <!-- Header -->
-                <div class="col-12">
-                    <div class="bg-light rounded p-4">
+                <div class="bg-light rounded align-items-center col-12 d-flex justify-content-between">
+                    <div class="rounded p-4">
                         <h4 class="text-primary mb-2">
                             <i class="fas fa-crown me-2"></i>Master Admin Dashboard
                         </h4>
                         <p class="text-muted mb-0">Create exams and upload questions</p>
+                    </div>
+                    <div class="manage-exams">
+                       <a href="{{ route('admin.exam-list') }}" class="btn btn-primary">Manage Exams</a>
                     </div>
                 </div>
 
@@ -32,7 +35,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('admin.dashboard.store') }}" method="POST">
+                        <form action="{{ route('admin.exam.save') }}" method="POST">
                             @csrf
 
                             <div class="row">
@@ -108,15 +111,31 @@
                         <h4 class="text-primary mb-4">
                             <i class="fas fa-upload me-2"></i>Upload Question
                         </h4>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+               
 
-                        <form action="{{ route('admin.questions.store') }}" method="POST">
+ 
+                        <form action="{{ route('admin.questions.save') }}" method="POST">
+                        @if(session('question_success'))
+                            <div class="alert alert-success">
+                                {{ session('question_success') }}
+                            </div>
+                        @endif 
                             @csrf
 
                             <div class="row">
                                 <div class="col-lg-8">
                                     <div class="mb-3">
                                         <label class="form-label">Select Exam</label>
-                                        <select class="form-select" name="exam_id" required>
+                                        <select class="form-select" name="exam_id" >
                                             <option value="">Choose exam...</option>
                                             @php $exams = App\Models\ExamList::all(); @endphp
                                             @foreach($exams as $exam)
@@ -127,26 +146,26 @@
 
                                     <div class="mb-3">
                                         <label class="form-label">Question</label>
-                                        <textarea class="form-control" name="question" rows="3" required></textarea>
+                                        <textarea class="form-control" name="question" rows="3" ></textarea>
                                     </div>
 
                                     <div class="row g-2 mb-3">
                                         
                                             <div class="col-md-6">
-                                                <label>A.</label>
-                                                <input type="text" class="form-control form-control-sm" name="option[]" required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label>B.</label>
-                                                <input type="text" class="form-control form-control-sm" name="option[]" required>
-                                            </div>
+                                                    <label>A.</label>
+                                                    <input type="text" class="form-control form-control-sm" name="options[]" >
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>B.</label>
+                                                    <input type="text" class="form-control form-control-sm" name="options[]" >
+                                                </div>
                                             <div class="col-md-6">
                                                 <label>C.</label>
-                                                <input type="text" class="form-control form-control-sm" name="option[]" required>
+                                                <input type="text" class="form-control form-control-sm" name="options[]" >
                                             </div>
                                             <div class="col-md-6">
                                                 <label>D.</label>
-                                                <input type="text" class="form-control form-control-sm" name="option[]" required>
+                                                <input type="text" class="form-control form-control-sm" name="options[]" >
                                             </div>
                                      
                                     </div>
@@ -157,31 +176,33 @@
                                            
                                                 <div class="col-md-3">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="option" value="option_a" required>
+                                                        <input class="form-check-input" type="radio" name="correct_option" value="0" >
                                                         <label class="form-check-label small">A</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="option" value="option_b" required>
+                                                        <input class="form-check-input" type="radio" name="correct_option" value="1" >
                                                         <label class="form-check-label small">B</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="option" value="option_c" required>
+                                                        <input class="form-check-input" type="radio" name="correct_option" value="2" >
                                                         <label class="form-check-label small">C</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="option" value="option_d" required>
+                                                        <input class="form-check-input" type="radio" name="correct_option" value="3" >
                                                         <label class="form-check-label small">D</label>
                                                     </div>
                                                 </div>
                                           
                                         </div>
                                     </div>
+
+                                    
                                 </div>
 
                                 <div class="col-lg-2 ">
@@ -192,6 +213,7 @@
                             </div>
                         </form>
                     </div>
+</div>
                 </div>
             </div>
         </div>
