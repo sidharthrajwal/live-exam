@@ -3,6 +3,14 @@
     --primary: #009CFF;
     --light: #F3F6F9;
     --dark: #191C24;
+    
+    
+  
+}
+
+body {
+    font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif !important;
+    background-color: #f5f5f5;
 }
 
 .back-to-top {
@@ -74,7 +82,7 @@
     width: 250px;
     height: 100vh;
     overflow-y: auto;
-    background: var(--light);
+    background: #f3f6f9;
     transition: 0.5s;
     z-index: 999;
 }
@@ -82,7 +90,7 @@
 .content {
     margin-left: 250px;
     min-height: 100vh;
-    background: #FFFFFF;
+    background: #ffffff;
     transition: 0.5s;
 }
 
@@ -134,7 +142,7 @@
 .sidebar .navbar .navbar-nav .nav-link:hover,
 .sidebar .navbar .navbar-nav .nav-link.active {
     color: var(--primary);
-    background: #FFFFFF;
+    background: #ffffff;
     border-color: var(--primary);
 }
 
@@ -144,7 +152,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #FFFFFF;
+    background: #ffffff;
     border-radius: 40px;
 }
 
@@ -192,7 +200,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #FFFFFF;
+    background: #ffffff;
     border-radius: 40px;
 }
 

@@ -1,7 +1,16 @@
-(function ($) {
-    "use strict";
 
+import $ from 'jquery';
+
+$(function () {
+console.log('sadsd')
     // Spinner
+    // $('.form-check-input').click(function () {
+    //     $('.form-check-input').each(function () {
+    //         console.log($(this).is(':checked'));
+    //         $(this).is(':checked') ? $(this).val(1) : $(this).val(0);
+    //     });
+    // });
+
     var spinner = function () {
         setTimeout(function () {
             if ($('#spinner').length > 0) {
@@ -232,7 +241,8 @@ closeIcon.addEventListener("click", () => {
   clearTimeout(timer1);
   clearTimeout(timer2);
 });
+console.log('sadsd')
 
-})(jQuery);
+});
 
 

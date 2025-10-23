@@ -150,7 +150,7 @@
                                              
                                                 <td>
                                                     <a href="{{route('admin.questions.edit', $question->id)}}" class="btn btn-sm btn-outline-primary me-1">Edit</a>
-                                                    <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
+                                                    <a href="{{route('admin.questions.destroy', $question->id)}}" class="btn btn-sm btn-outline-danger">Delete</a>
                                                 </td>
                                             </tr>
                                             @endforeach

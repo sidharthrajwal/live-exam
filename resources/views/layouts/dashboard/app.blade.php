@@ -65,7 +65,7 @@
     @vite(['resources/js/main.js'])
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+   
 </body>
 
 </html>

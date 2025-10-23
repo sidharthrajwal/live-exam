@@ -80,8 +80,9 @@ class QuestionController extends Controller
      */
     public function edit(string $id)
     {
-        // $question = questions::findOrFail($id);
-        // return view('Dashboard.Admin.admin-dashboard', compact('question'));
+        $question = questions::with('answers')->find($id);
+       // dd($question);
+        return view('Dashboard.Admin.manage-questions', compact('question'));
     }
 
     /**
@@ -89,7 +90,34 @@ class QuestionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $question_data = $request->validate([
+            'question' => 'required',
+            'options.*' => 'required|string|max:255',
+            'correct_option' => 'required',
+            
+        ]);
+
+
+
+        $update_question = questions::find($id);
+        $update_question->update($question_data);   
+        $question_options = $request->options;
+
+        $question_correct_option = $request->correct_option;
+
+        $answers = $update_question->answers; 
+
+        foreach ($answers as $index => $answer) {
+     
+            $answer->update([
+                'option_value' => $question_options[$index],
+                'c_answer' => $index == $question_correct_option ? true : false,
+            ]);
+          
+        }
+    
+        return redirect()->back()->with('question_success', 'Question updated successfully');
+       
     }
 
     /**
@@ -97,6 +125,8 @@ class QuestionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $question = questions::find($id);
+        $question->delete();
+        return redirect()->back()->with('question_success', 'Question deleted successfully');
     }
 }

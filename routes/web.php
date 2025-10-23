@@ -99,6 +99,7 @@ Route::get('/help-center', function () {
         'store' => 'exam.save',
         'edit' => 'manage-exam.edit',
         'update' => 'manage-exam.update',
+      
     ]);
 
     Route::resource('questions', QuestionController::class)
@@ -108,6 +109,7 @@ Route::get('/help-center', function () {
             'edit' => 'questions.edit',
             'update' => 'questions.update',
             'destroy' => 'questions.destroy'
+            
         ]);
 });
 
