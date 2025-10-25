@@ -50,7 +50,8 @@ Route::get('/dashboard', function () {
     });
 
     Route::get('/examroom', [ExamRoomController::class, 'index'])->name('examroom');
-    Route::post('/examroom', [ExamRoomController::class, 'joinSlot'])->name('examroom');  
+    Route::post('/join-slot', [SlotbookingController::class, 'joinSlot'])->name('join.slot');
+    Route::post('/leave-slot', [SlotbookingController::class, 'leaveSlot'])->name('leave.slot');
 
     Route::get('/all-exams', [SlotbookingController::class, 'index'])->name('all-exams');
     Route::post('/all-exams', [SlotbookingController::class, 'joinSlot'])->name('all-exams');  

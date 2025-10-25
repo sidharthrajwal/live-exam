@@ -76,6 +76,7 @@ class SlotbookingController extends Controller
             'user_id' => $user_id,
             'subject_code' => $exam_code,
             'exam_score' => 0,
+            'score' => 0,
             'status' => 'joined',    
            
         ]);
@@ -96,5 +97,6 @@ class SlotbookingController extends Controller
 
         ExamRoom::where('user_id', $user_id)->delete();
         return view('Dashboard.Exam.students-exam');
+         dd($request->all());
     }
 }   

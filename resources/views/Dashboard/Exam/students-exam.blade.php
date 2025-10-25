@@ -179,8 +179,8 @@
         <!-- Leave Exam Modal -->
         <div class="modal fade" id="leaveExamModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <form action="{{ route('leave-slot') }}" method="POST">
-                @csrf
+                <form action="{{ route('leaveroom') }}" method="POST">
+                        @csrf
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title">Leave Exam?</h6>
