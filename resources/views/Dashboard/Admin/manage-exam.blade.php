@@ -127,6 +127,7 @@
                                     <a href="#" class="btn btn-primary btn-sm">Add Question</a>
                                 </div>
                                 <div class="table-responsive">
+                                    <form action="">
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>

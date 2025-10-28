@@ -18,7 +18,7 @@
         @include('layouts.dashboard.navbar-content')
         <!-- Navbar End -->
 
-  
+
 @if(empty($joined_subjects) )
     
 <div class="alert alert-primary border-0 d-flex align-items-center justify-content-center mb-4 shadow-lg position-fixed top-50 start-50 translate-middle" role="alert" 

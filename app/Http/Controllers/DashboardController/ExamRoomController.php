@@ -1,8 +1,11 @@
 <?php
 namespace App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redis;
 use App\Models\ExamRoom;
 use App\Models\ExamList;
+use App\Models\questions;
+
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -26,6 +29,17 @@ class ExamRoomController extends Controller
     public function index()
     {
         
+    
+        $examroom = ExamRoom::with('exam')->where('user_id', auth()->id())->first();
+        $examroom->exam->id;
+        $questions = questions::where('exam_id', $examroom->exam->id)->get();
+        Redis::set('questions', json_encode($questions));
+
+        // Retrieve
+        $data = json_decode(Redis::get('questions'), true);
+        
+        dd($data);
+        
         $student_id = auth()->id();
         $exam_room = ExamRoom::where('user_id', $student_id)->first();
         $exam_room_code = null;
@@ -47,14 +61,24 @@ class ExamRoomController extends Controller
             }
         }
     
-    
+     
         return view('Dashboard.Exam.students-exam', compact(
             'joined_subjects',
             'exam_room_code',
             'exam_room_duration',
             'exam_room_subject_name',
-            'booked_slot_count'
+            'booked_slot_count',
+            'questions'
         ));
+    }
+    public function ChangeQuestions()
+    {
+
+        $questions = Redis::get('name');
+        
+
+       // return view('Dashboard.Exam.students-exam', compact('questions'));
+
     }
     
 }
