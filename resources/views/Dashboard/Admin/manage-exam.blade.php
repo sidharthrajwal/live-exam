@@ -124,7 +124,7 @@
                             <div class="card p-4">
                                 <div class="d-flex justify-content-between align-items-center mb-4">
                                     <h5 class="text-primary mb-0">Questions ({{ $questionList->count() }})</h5>
-                                    <a href="#" class="btn btn-primary btn-sm">Add Question</a>
+                                    <a href="#"  class="btn btn-primary btn-sm">Next Question</a>
                                 </div>
                                 <div class="table-responsive">
                                     <form action="">

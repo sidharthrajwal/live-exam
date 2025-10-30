@@ -33,12 +33,13 @@ class ExamRoomController extends Controller
         $examroom = ExamRoom::with('exam')->where('user_id', auth()->id())->first();
         $examroom->exam->id;
         $questions = questions::where('exam_id', $examroom->exam->id)->get();
+   
         Redis::set('questions', json_encode($questions));
 
         // Retrieve
-        $data = json_decode(Redis::get('questions'), true);
+        // $data = json_decode(Redis::get('questions'), true);
         
-        dd($data);
+        // dd($data);
         
         $student_id = auth()->id();
         $exam_room = ExamRoom::where('user_id', $student_id)->first();
@@ -74,10 +75,19 @@ class ExamRoomController extends Controller
     public function ChangeQuestions()
     {
 
-        $questions = Redis::get('name');
-        
+        $index = 0;
+        $questions = Redis::get('questions');
 
-       // return view('Dashboard.Exam.students-exam', compact('questions'));
+        $questions = json_decode($questions, true);
+        $current_question = $questions[$index]['question'];
+        $next_question = $index + 1;
+
+        $cureent_index=  Redis::set('current_index', $next_question);
+        dd($cureent_index);
+ 
+  
+
+       return view('Dashboard.Exam.students-exam', compact('questions'));
 
     }
     

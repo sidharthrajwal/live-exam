@@ -142,7 +142,7 @@
                                                 <button class="btn btn-outline-warning btn-sm"><i class="fa fa-flag me-2"></i>Mark for Review</button>
                                                 <button class="btn btn-success btn-sm"><i class="fa fa-save me-2"></i>Save Answer</button>
                                             </div>
-                                            <button class="btn btn-primary btn-sm">Next<i class="fa fa-arrow-right ms-2"></i></button>
+                                            <button id="nextBtn" class="btn btn-primary btn-sm">Next<i class="fa fa-arrow-right ms-2"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -222,6 +222,7 @@
 </div>
 <!-- End Container Fluid -->
 
+@vite(['resources/js/question-answer.js'])
 @push('scripts')
 <script>
     // Simple countdown display (UI only)
