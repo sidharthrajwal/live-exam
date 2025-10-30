@@ -58,7 +58,12 @@
         ],
         "post-install-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --force",
-            "npm install && npm run build"
+            "npm install && npm run build",
+            "@php artisan config:clear",
+            "@php artisan route:clear",
+            "@php artisan view:clear",
+            "@php artisan config:cache",
+            "@php artisan view:cache"
         ]
     },
     "extra": {
