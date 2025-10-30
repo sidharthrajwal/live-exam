@@ -50,11 +50,11 @@ Route::get('/dashboard', function () {
     });
 
     Route::get('/examroom', [ExamRoomController::class, 'index'])->name('examroom');
-    Route::post('/examroom', [ExamRoomController::class, 'joinSlot'])->name('examroom');  
+    Route::post('/examroom', [ExamRoomController::class, 'joinSlot']);  
     Route::get('/examroom/change-questions', [ExamRoomController::class, 'ChangeQuestions'])->name('examroom.change-questions');  
 
     Route::get('/all-exams', [SlotbookingController::class, 'index'])->name('all-exams');
-    Route::post('/all-exams', [SlotbookingController::class, 'joinSlot'])->name('all-exams');  
+    Route::post('/all-exams', [SlotbookingController::class, 'joinSlot'])->name('all-exams.new');  
 
 
 Route::get('/result', function () {
@@ -82,10 +82,10 @@ Route::get('/help-center', function () {
     });
 
     Route::get('/join-slot', [SlotbookingController::class, 'index'])->name('join-slot');
-    Route::post('/join-slot', [SlotbookingController::class, 'joinSlot'])->name('join-slot');   
+    Route::post('/join-slot', [SlotbookingController::class, 'joinSlot'])->name('join-slot.new');   
 
     Route::get('/leave-slot', [SlotbookingController::class, 'index'])->name('leave-slot');
-    Route::post('/leave-slot', [SlotbookingController::class, 'leaveSlot'])->name('leave-slot');   
+    Route::post('/leave-slot', [SlotbookingController::class, 'leaveSlot'])->name('leave-slot.new');   
 
 
 // Admin Routes
