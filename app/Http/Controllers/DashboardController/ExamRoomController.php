@@ -31,9 +31,15 @@ class ExamRoomController extends Controller
         
     
         $examroom = ExamRoom::with('exam')->where('user_id', auth()->id())->first();
-        $examroom->exam->id;
-        $questions = questions::where('exam_id', $examroom->exam->id)->get();
-   
+       
+        $examId = $examroom->exam->id;
+
+        $questions = Questions::with(['answers' => function ($query) {
+            $query->select('id', 'question_id', 'option_value', 'c_answer');
+        }])
+        ->where('exam_id', $examId)
+        ->get();
+        
         Redis::set('questions', json_encode($questions));
 
         // Retrieve
@@ -72,22 +78,32 @@ class ExamRoomController extends Controller
             'questions'
         ));
     }
-    public function ChangeQuestions()
+    public function ChangeQuestions(Request $request)
     {
 
-        $index = 0;
+        // dd($request->all());
+        $index = $request->index;
         $questions = Redis::get('questions');
-
+       
         $questions = json_decode($questions, true);
-        $current_question = $questions[$index]['question'];
-        $next_question = $index + 1;
 
-        $cureent_index=  Redis::set('current_index', $next_question);
-        dd($cureent_index);
+        if($index >= count($questions)){
+            return response()->json(['current_question' => null, 'current_options' => null]);
+        }
+
+  
+        $current_id = $questions[$index]['id'];
+       
+        $current_question = $questions[$index]['question'];
+        
+
+        $current_options = $questions[$index]['answers'];
+        
  
+        return response()->json(['current_question' => $current_question, 'current_options' => $current_options]);
   
 
-       return view('Dashboard.Exam.students-exam', compact('questions'));
+      
 
     }
     

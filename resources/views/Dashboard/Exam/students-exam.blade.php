@@ -119,20 +119,20 @@
                                             <span class="badge bg-dark">Question 1 of 20</span>
                                             <small class="text-muted">1 mark</small>
                                         </div>
-                                        <p class="mb-3">If 2x + 3 = 11, what is the value of x?</p>
+                                        <p id="question" data-index="0" class="mb-3">If 2x + 3 = 11, what is the value of x?</p>
 
                                         <div class="list-group">
                                             <label class="list-group-item">
-                                                <input class="form-check-input me-2" type="radio" name="q1" /> 2
+                                                <input class="form-check-input me-2"   type="radio" name="q1" /> 2
                                             </label>
                                             <label class="list-group-item">
-                                                <input class="form-check-input me-2" type="radio" name="q1" /> 3
+                                                <input class="form-check-input me-2"  type="radio" name="q1" /> 3
                                             </label>
                                             <label class="list-group-item">
-                                                <input class="form-check-input me-2" type="radio" name="q1" /> 4
+                                                <input class="form-check-input me-2"  type="radio" name="q1" /> 4
                                             </label>
                                             <label class="list-group-item">
-                                                <input class="form-check-input me-2" type="radio" name="q1" /> 5
+                                                <input class="form-check-input me-2"  type="radio" name="q1" /> 5
                                             </label>
                                         </div>
 
@@ -165,7 +165,7 @@
                                 <div class="row g-2">
                                     @for($i=1; $i<=20; $i++)
                                         <div class="col-3">
-                                            <button class="btn btn-sm w-100 btn-outline-secondary">{{$i}}</button>
+                                            <button data-index="{{$i-1}}" class="btn btn-sm w-100 btn-outline-secondary change-question">{{$i}}</button>
                                         </div>
                                     @endfor
                                 </div>

@@ -90,7 +90,7 @@ class AdminController extends Controller
 
     
     $exam_detail = ExamList::find($id);
-    $questionList = questions::with('answers')->get();
+    $questionList = questions::with('answers')->where('exam_id', $id)->get();
     return view('Dashboard.Admin.manage-exam', compact('exam_detail', 'questionList'));
 
     }
