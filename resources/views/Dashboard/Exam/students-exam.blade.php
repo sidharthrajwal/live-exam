@@ -114,6 +114,7 @@
 
                                 <!-- Question Card -->
                                 <div class="card mb-3">
+                                        <form action="{{ route('examroom.submit-answer') }}" method="POST">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center justify-content-between mb-2">
                                             <span class="badge bg-dark">Question 1 of 20</span>
@@ -145,6 +146,7 @@
                                             <button id="nextBtn" class="btn btn-primary btn-sm">Next<i class="fa fa-arrow-right ms-2"></i></button>
                                         </div>
                                     </div>
+                                    </form>
                                 </div>
 
                                 <!-- Submission -->

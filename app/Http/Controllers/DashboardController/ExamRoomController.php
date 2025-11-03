@@ -30,9 +30,13 @@ class ExamRoomController extends Controller
     {
         
     
-        $examroom = ExamRoom::with('exam')->where('user_id', auth()->id())->first();
-       
+        $examroom = ExamRoom::where('user_id', auth()->id())->first();
+        if($examroom == null){
+            return redirect()->route('dashboard');
+        }
         $examId = $examroom->exam->id;
+
+      
 
         $questions = Questions::with(['answers' => function ($query) {
             $query->select('id', 'question_id', 'option_value', 'c_answer');
@@ -105,6 +109,15 @@ class ExamRoomController extends Controller
 
       
 
+    }
+    public function SubmitAnswer(Request $request)
+    {
+        dd($request->all());
+    }
+
+    public function SubmitExam(Request $request)
+    {
+        dd($request->all());
     }
     
 }
