@@ -1,42 +1,38 @@
 import $ from 'jquery';
-
-$(function() {
-    console.log("Exam room ready!");
-
-    $('#examCodeForm').on('submit', function(e) {
-        e.preventDefault();
-
-        var exam_code = $('#examCodeInput').val();
-        $.ajax({
-            headers: {
-             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: "/join-slot",
-            data: { 'exam_code': exam_code },
-            type: 'POST',
-            dataType: 'json',
-            success: function(result) {
-                console.log("Success:", result);
-                if (result.status === 'joined') {
-                  $('#status-msg').html('<div class="alert alert-primary">Joined successfully</div>');
-                  $('.status-active').after(' <span class="ml-4 badge bg-danger status-joined">Joined</span>');
-                  $('.enter-exam').remove();
-                  $('#examCodeModal').remove();
-                  $('.modal-backdrop.fade').remove();
-                  window.location.href = '/examroom';
-                }
-            },
-            error: function(xhr, status, error) {
-      
-              if(xhr.responseJSON && xhr.responseJSON.msg){
-                $('#status-msg').html('<div class="alert alert-danger">' + xhr.responseJSON.msg + '</div>');
-            } else if(error === 'Not Found'){
-                $('#status-msg').html('<div class="alert alert-danger">Exam Not Found</div>');
-            } else {
-                $('#status-msg').html('<div class="alert alert-danger">Something went wrong</div>');
-            }
-               
-            }
-        });
+async function loadNextQuestion(index) {
+    const response = await fetch('/examroom/change-questions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      body: JSON.stringify({ index })
     });
-});
+    const data = await response.json();
+    if (data.current_question) {
+      $('p#question').text(data.current_question).attr('data-index', index + 1);
+      $('.list-group').empty();
+      data.current_options.forEach((answer) => {
+        $('.list-group').append(`
+          <label class="list-group-item">
+            <input class="form-check-input me-2" type="radio" name="q1" value="${answer.option_value}">
+            ${answer.option_value}
+          </label>
+        `);
+      });
+    } else {
+      alert('Exam finished!');
+    }
+  }
+  
+  $('#nextBtn').on('click', (e) => {
+    e.preventDefault();
+    const idx = Number($('p#question').data('index')) || 0;
+    loadNextQuestion(idx);
+  });
+  
+  $('#prevBtn').on('click', (e) => {
+    e.preventDefault();
+    const idx = Math.max(0, (Number($('p#question').data('index')) || 1) - 2);
+    loadNextQuestion(idx);
+  });

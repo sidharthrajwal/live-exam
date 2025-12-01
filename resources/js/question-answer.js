@@ -1,51 +1,68 @@
 import $ from 'jquery';
 
 $(function () {
-    console.log("Question ready!");
-
-    let currentIndex = $('p#question').data('index');
-
-    async function loadNextQuestion() {
+    async function loadNextQuestion(currentIndex) {
         try {
-            const response = await fetch(`/examroom/change-questions?index=${currentIndex}`);
+            const response = await fetch('/examroom/change-questions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                body: JSON.stringify({ index: Number(currentIndex) || 0 })
+            });
             
             const data = await response.json();
             
-            console.log(data.current_question);
-
             if (data.current_question) {
+                const nextIndex = (Number(currentIndex) || 0) + 1;
 
-                $('p#question').text(data.current_question);
-                console.log(data.current_options);
-                $('div.list-group').empty();
-                currentIndex = currentIndex + 1;
-                data.current_options.forEach((answer, _index) => {
+                const $q = $('p#question');
+                $q.text(data.current_question)
+                  .attr('data-index', nextIndex)
+                  .data('index', nextIndex);
+
+                const $list = $('div.list-group');
+                $list.empty();
+                (data.current_options || []).forEach((answer) => {
                     const options = `
                         <label class="list-group-item">
-                            <input class="form-check-input me-2" type="radio" name="q1" data-index="${currentIndex}" value="${answer.option_value}">
+                            <input class="form-check-input me-2" type="radio" name="q1" value="${answer.option_value}">
                             ${answer.option_value}
                         </label>
                     `;
-                    $('div.list-group').append(options);
+                    $list.append(options);
                 });
-                console.log(currentIndex);
-            } 
-         
-            if (data.current_question === null) {
-
+            } else {
                 alert('Exam finished!');
-            }            
-            
+            }
         } catch (error) {
-            console.error("Error fetching question:", error);
+            console.error('Error fetching question:', error);
             alert('Failed to load next question.');
         }
     }
 
-    $('#nextBtn').on('click', loadNextQuestion);
+  
+    function getCurrentIndexFromDom() {
+        return Number($('p#question').attr('data-index')) || 0;
+    }
 
-    $('.change-question').on('click', function() {
-        currentIndex = $(this).data('index');
-        loadNextQuestion();
+    $('#nextBtn').on('click', function (e) {
+        e.preventDefault();
+        const idx = getCurrentIndexFromDom();
+        loadNextQuestion(idx);
+    });
+
+    $('#prevBtn').on('click', function (e) {
+        e.preventDefault();
+        
+        const idx = Math.max(0, getCurrentIndexFromDom() - 2);
+        loadNextQuestion(idx);
+    });
+
+    $('.change-question').on('click', function (e) {
+        e.preventDefault();
+        const idx = Number($(this).data('index')) || 0;
+        loadNextQuestion(idx);
     });
 });

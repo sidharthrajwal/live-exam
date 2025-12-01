@@ -114,7 +114,8 @@
 
                                 <!-- Question Card -->
                                 <div class="card mb-3">
-                                        <form action="{{ route('examroom.submit-answer') }}" method="POST">
+                                        <form  action="{{ route('examroom.submit-answer') }}" method="POST">
+                                            @csrf
                                     <div class="card-body">
                                         <div class="d-flex align-items-center justify-content-between mb-2">
                                             <span class="badge bg-dark">Question 1 of 20</span>
@@ -138,13 +139,17 @@
                                         </div>
 
                                         <div class="d-flex justify-content-between mt-3">
-                                            <button class="btn btn-outline-secondary btn-sm"><i class="fa fa-arrow-left me-2"></i>Previous</button>
-                                            <div class="d-flex gap-2">
-                                                <button class="btn btn-outline-warning btn-sm"><i class="fa fa-flag me-2"></i>Mark for Review</button>
-                                                <button class="btn btn-success btn-sm"><i class="fa fa-save me-2"></i>Save Answer</button>
-                                            </div>
-                                            <button id="nextBtn" class="btn btn-primary btn-sm">Next<i class="fa fa-arrow-right ms-2"></i></button>
-                                        </div>
+    <button id="prevBtn" type="button" class="btn btn-outline-secondary btn-sm">
+        <i class="fa fa-arrow-left me-2"></i>Previous
+    </button>
+    <div class="d-flex gap-2">
+        <button class="btn btn-outline-warning btn-sm"><i class="fa fa-flag me-2"></i>Mark for Review</button>
+        <button class="btn btn-success btn-sm"><i class="fa fa-save me-2"></i>Save Answer</button>
+    </div>
+    <button id="nextBtn" type="button" class="btn btn-primary btn-sm">
+        Next<i class="fa fa-arrow-right ms-2"></i>
+    </button>
+</div>
                                     </div>
                                     </form>
                                 </div>

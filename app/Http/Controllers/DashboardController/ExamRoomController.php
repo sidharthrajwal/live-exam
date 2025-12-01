@@ -112,12 +112,12 @@ class ExamRoomController extends Controller
     }
     public function SubmitAnswer(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
     }
 
     public function SubmitExam(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
     }
     
 }
