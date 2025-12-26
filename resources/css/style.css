@@ -483,4 +483,19 @@ body {
   .toast.active ~ button {
     pointer-events: none;
   }
-  
+  .text-white.rounded-circle.me-3 {
+    width: 50px;
+    height: 50px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+
+button.active-marked 
+{
+
+  background: #ffc107 ;
+  color: black;
+
+}

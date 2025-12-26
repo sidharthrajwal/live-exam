@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Redis;
 use App\Models\ExamRoom;
 use App\Models\ExamList;
 use App\Models\questions;
-
+use Illuminate\View\Component;
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -14,10 +14,15 @@ class ExamRoomController extends Controller
 {
 
     public $joined_subjects;
+
+    public array $remarked_question;
+
     public function __construct()
     {
+
+
         $student_id = auth()->id();
- 
+      
         $exam_room_status = ExamRoom::where('user_id', $student_id)->get();
         foreach ($exam_room_status as $room) {
             if ($room['status'] === 'joined') {
@@ -26,13 +31,15 @@ class ExamRoomController extends Controller
         }
     }
 
+  
     public function index()
     {
         
     
         $examroom = ExamRoom::where('user_id', auth()->id())->first();
+        // dd($examroom);
         if($examroom == null){
-            return redirect()->route('dashboard');
+            return redirect()->route('join-slot');
         }
         $examId = $examroom->exam->id;
 
@@ -53,6 +60,7 @@ class ExamRoomController extends Controller
         
         $student_id = auth()->id();
         $exam_room = ExamRoom::where('user_id', $student_id)->first();
+        $remarked_question =  $exam_room->is_marked;
         $exam_room_code = null;
         $exam_room_duration = null;
         $exam_room_subject_name = null;
@@ -71,7 +79,7 @@ class ExamRoomController extends Controller
                 $exam_room_subject_name = $exam->subject_name;
             }
         }
-    
+        
      
         return view('Dashboard.Exam.students-exam', compact(
             'joined_subjects',
@@ -79,7 +87,8 @@ class ExamRoomController extends Controller
             'exam_room_duration',
             'exam_room_subject_name',
             'booked_slot_count',
-            'questions'
+            'questions',
+            'remarked_question'
         ));
     }
     public function ChangeQuestions(Request $request)
@@ -112,12 +121,37 @@ class ExamRoomController extends Controller
     }
     public function SubmitAnswer(Request $request)
     {
-        // dd($request->all());
+        if ($request->has('marked_value')) {
+          return $this->ReviewMarked($request);
+        }
+    
+     
     }
-
-    public function SubmitExam(Request $request)
+    
+    public function ReviewMarked(Request $request)
     {
-        // dd($request->all());
+        $examRoom = ExamRoom::where('subject_code', $request->exam_code)
+                            ->where('user_id', auth()->id())
+                            ->firstOrFail();
+    
+        // Ensure $marked is an array
+        $marked = is_array($examRoom->is_marked) ? $examRoom->is_marked : [];
+    
+        $index = (int) $request->index;
+    
+        // Only add if not already marked
+        if (!in_array($index, $marked, true)) {
+            $marked[] = $index;
+        }
+    
+        // Save back to DB — this **updates the same column**, preserving existing values
+        $examRoom->update(['is_marked' => $marked]);
+    
+        return response()->json([
+            'remark_added' => true,
+            'marked_questions' => $marked
+        ]);
     }
+    
     
 }

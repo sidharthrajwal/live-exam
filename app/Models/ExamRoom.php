@@ -14,9 +14,17 @@ class ExamRoom extends Model
         'exam_score',
         'subject_code',
         'status',
+        'is_marked', 
     ];
 
-
+    protected $casts = [
+        'is_marked' => 'array',
+    ];
+    
+    protected $attributes = [
+        'is_marked' => '[]',
+    ];
+    
     public function exam()
     {
         return $this->belongsTo(ExamList::class, 'exam_id');

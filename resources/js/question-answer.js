@@ -65,4 +65,38 @@ $(function () {
         const idx = Number($(this).data('index')) || 0;
         loadNextQuestion(idx);
     });
+
+
+$('#marked_value').on('click', function (e) {
+    e.preventDefault();
+    const index = $('p#question').data('index');
+    const examCode = $(this).data('exam-code');
+    const value = $(this).val();
+
+    markQuestion(value, examCode, index);
+});
+
+    async function markQuestion(currentValue, exam_code, index) { 
+
+        try {
+         
+            console.log(exam_code);
+
+            console.log(index);
+
+
+            await fetch('/examroom/submit-answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                body: JSON.stringify({ marked_value: Number(currentValue) || 0, exam_code: exam_code, index:index })
+            });
+            
+        } catch (error) {
+            console.error('Error fetching question:', error);
+            alert('Failed to load next question.');
+        }
+    }
 });

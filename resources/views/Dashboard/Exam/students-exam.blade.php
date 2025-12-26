@@ -143,8 +143,8 @@
         <i class="fa fa-arrow-left me-2"></i>Previous
     </button>
     <div class="d-flex gap-2">
-        <button class="btn btn-outline-warning btn-sm"><i class="fa fa-flag me-2"></i>Mark for Review</button>
-        <button class="btn btn-success btn-sm"><i class="fa fa-save me-2"></i>Save Answer</button>
+        <button type="submit" class="btn btn-outline-warning btn-sm" name="marked_value" id="marked_value" value="review_makred" data-exam-code="{{$exam_room_code}}"><i class="fa fa-flag me-2"></i>Mark for Review</button>
+        <button type="submit" class="btn btn-success btn-sm" name="save" name="submit-answer"><i class="fa fa-save me-2"></i>Save Answer</button>
     </div>
     <button id="nextBtn" type="button" class="btn btn-primary btn-sm">
         Next<i class="fa fa-arrow-right ms-2"></i>
@@ -159,24 +159,8 @@
                                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#submitExamModal"><i class="fa fa-paper-plane me-2"></i>Submit Exam</button>
                                 </div>
                             </div>
+                            <x-question-count :question-count="$remarked_question" />
 
-                            <!-- Right: Navigator -->
-                            <div class="col-lg-3 border-start p-3 p-md-4 bg-light">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <h6 class="mb-0">Navigator</h6>
-                                    <div class="d-flex gap-1">
-                                        <span class="badge bg-success">Saved</span>
-                                        <span class="badge bg-warning text-dark">Marked</span>
-                                    </div>
-                                </div>
-                                <div class="row g-2">
-                                    @for($i=1; $i<=20; $i++)
-                                        <div class="col-3">
-                                            <button data-index="{{$i-1}}" class="btn btn-sm w-100 btn-outline-secondary change-question">{{$i}}</button>
-                                        </div>
-                                    @endfor
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

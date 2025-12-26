@@ -54,6 +54,7 @@ Route::get('/dashboard', function () {
     Route::post('/examroom/change-questions', [ExamRoomController::class, 'ChangeQuestions'])->name('examroom.change-questions'); 
     Route::post('/examroom/submit-answer', [ExamRoomController::class, 'SubmitAnswer'])->name('examroom.submit-answer');  
     Route::post('/examroom/submit-exam', [ExamRoomController::class, 'SubmitExam'])->name('examroom.submit-exam');  
+    // Route::post('/examroom/review-marked', [ExamRoomController::class, 'ReviewMarked'])->name('examroom.review-marked'); 
 
     Route::get('/all-exams', [SlotbookingController::class, 'index'])->name('all-exams');
     Route::post('/all-exams', [SlotbookingController::class, 'joinSlot'])->name('all-exams.new');  
