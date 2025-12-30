@@ -41,6 +41,7 @@
             <div class="row g-4">
                 <div class="col-12">
                     <div class="bg-light rounded p-3 p-md-4">
+                        {{session()->get('msg')}}
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <h6 class="mb-0">Active & Upcoming Exams</h6>
                             <div class="d-flex gap-2">

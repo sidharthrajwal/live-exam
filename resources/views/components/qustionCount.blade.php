@@ -13,10 +13,10 @@
 
     
 
-         @for($i=1; $i<=20; $i++)
+         @for($i=0; $i<=19; $i++)
          
              <div class="col-3">
-                 <button data-index="{{$i-1}}" class="btn btn-sm w-100 btn-outline-secondary {{ in_array($i, $questionCount) ? 'active-marked' : '' }} change-question">{{$i}}</button>
+                 <button data-index="{{$i}}" class="btn btn-sm w-100 btn-outline-secondary {{ in_array($i, $savedquestion) ? 'active-saved' : '' }} {{ in_array($i, $questioncount) ? 'active-marked' : '' }} change-question">{{$i+1}}</button>
              </div>
          @endfor
      </div>

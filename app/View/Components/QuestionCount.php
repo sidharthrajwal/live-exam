@@ -10,13 +10,15 @@ class QuestionCount extends Component
 {
 
 
- public array $questionCount;
+ public array $questioncount;
+ public array $savedquestion;
     /**
      * Create a new component instance.
      */
-    public function __construct(?array $questionCount = null)
+    public function __construct(?array $questioncount = null, ?array $savedquestion = null)
     {
-        $this->questionCount = $questionCount ?? [];
+        $this->questioncount = $questioncount ?? [];
+        $this->savedquestion = $savedquestion ?? [];
     }
 
     /**
@@ -25,7 +27,8 @@ class QuestionCount extends Component
     public function render(): View|Closure|string
     {
         return view('components.qustionCount', [
-            'qustionCount' => $this->questionCount,
+            'questioncount' => $this->questioncount,
+            'savedquestion' => $this->savedquestion,
         ]);
     }
 }

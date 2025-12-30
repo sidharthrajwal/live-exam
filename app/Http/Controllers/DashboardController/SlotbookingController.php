@@ -58,11 +58,11 @@ class SlotbookingController extends Controller
         $booked_slot_count = ExamRoom::where('status', 'joined')->where('subject_code', $exam_code)->count();
         
         if($booked_slot_count >  $this->max_slots){
-            return response()->json(array('msg'=> 'Exam Room is full'), 404);
+            return response()->json(session()->flash('msg', 'Exam Room is full'), 404);
         }
         
         if($exam_room_status && $exam_room_status->id){
-            return response()->json(array('msg'=> 'You have already in Examroom'), 404);
+            return response()->json(session()->flash('msg', 'You have already in Examroom'), 404);
         }
 
        
@@ -74,7 +74,6 @@ class SlotbookingController extends Controller
         $examroom = ExamRoom::updateOrCreate([
             'exam_id' => $get_exam_id,
             'user_id' => $user_id,
-            'subject_code' => $exam_code,
             'exam_score' => 0,
             'status' => 'joined',    
            
@@ -82,7 +81,7 @@ class SlotbookingController extends Controller
 
        
 
-        return response()->json(array('status'=> 'joined'), 200);
+        return redirect()->route('examroom')->with('msg', 'You have successfully joined the exam room');
     
     }
 

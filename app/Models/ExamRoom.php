@@ -15,14 +15,17 @@ class ExamRoom extends Model
         'subject_code',
         'status',
         'is_marked', 
+        'is_saved',
     ];
 
     protected $casts = [
         'is_marked' => 'array',
+        'is_saved' => 'array',
     ];
     
     protected $attributes = [
         'is_marked' => '[]',
+        'is_saved' => '[]',
     ];
     
     public function exam()

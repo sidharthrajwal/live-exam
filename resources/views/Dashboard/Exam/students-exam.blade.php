@@ -114,14 +114,18 @@
 
                                 <!-- Question Card -->
                                 <div class="card mb-3">
+                                    <div id="alert-wrapper"></div>
                                         <form  action="{{ route('examroom.submit-answer') }}" method="POST">
                                             @csrf
                                     <div class="card-body">
                                         <div class="d-flex align-items-center justify-content-between mb-2">
                                             <span class="badge bg-dark">Question 1 of 20</span>
                                             <small class="text-muted">1 mark</small>
+
                                         </div>
-                                        <p id="question" data-index="0" class="mb-3">If 2x + 3 = 11, what is the value of x?</p>
+
+                            
+                                        <p id="question" data-question-index="0"  data-exam-code="{{$exam_room_code}}" data-question-id="{{$question_id}}" class="mb-3">If 2x + 3 = 11, what is the value of x?</p>
 
                                         <div class="list-group">
                                             <label class="list-group-item">
@@ -144,7 +148,7 @@
     </button>
     <div class="d-flex gap-2">
         <button type="submit" class="btn btn-outline-warning btn-sm" name="marked_value" id="marked_value" value="review_makred" data-exam-code="{{$exam_room_code}}"><i class="fa fa-flag me-2"></i>Mark for Review</button>
-        <button type="submit" class="btn btn-success btn-sm" name="save" name="submit-answer"><i class="fa fa-save me-2"></i>Save Answer</button>
+        <button type="submit" class="btn btn-success btn-sm" name="marked_value"  id="submit_answer" data-exam-code="{{$exam_room_code}}" value="save_answer"><i class="fa fa-save me-2"></i>Save Answer</button>
     </div>
     <button id="nextBtn" type="button" class="btn btn-primary btn-sm">
         Next<i class="fa fa-arrow-right ms-2"></i>
@@ -159,7 +163,7 @@
                                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#submitExamModal"><i class="fa fa-paper-plane me-2"></i>Submit Exam</button>
                                 </div>
                             </div>
-                            <x-question-count :question-count="$remarked_question" />
+                            <x-question-count :savedquestion="$saved_question" :questioncount="$remarked_question" />
 
                         </div>
                     </div>
@@ -209,11 +213,13 @@
         </div>
     @endif
     </div>
+
     <!-- Content End -->
 </div>
 <!-- End Container Fluid -->
 
 @vite(['resources/js/question-answer.js'])
+@vite(['resources/js/exam-room.js'])
 @push('scripts')
 <script>
     // Simple countdown display (UI only)

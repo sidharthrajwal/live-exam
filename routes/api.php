@@ -9,7 +9,7 @@ use App\Http\Controllers\LoginController;
 
 
 
-Route::post('/submit-answer', [ApiController::class, 'SubmitAnswer']);
+// Route::post('/submit-answer', [ApiController::class, 'SubmitAnswer']);
 
 
 Route::post('/login', [LoginController::class, 'login']);
