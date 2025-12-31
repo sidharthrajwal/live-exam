@@ -124,22 +124,18 @@
 
                                         </div>
 
-                            
-                                        <p id="question" data-question-index="0"  data-exam-code="{{$exam_room_code}}" data-question-id="{{$question_id}}" class="mb-3">If 2x + 3 = 11, what is the value of x?</p>
 
+                
+
+                                        <h2 id="question" data-question-index="0"  data-exam-code="{{$exam_room_code}}" data-question-id="{{$question_id}}"  class="mb-3">{{ $question_title }}</h2>
                                         <div class="list-group">
+
+                                        @foreach ($questions['answers'] as $answer)
                                             <label class="list-group-item">
-                                                <input class="form-check-input me-2"   type="radio" name="q1" /> 2
+                                                <input class="form-check-input me-2"  data-opt-id="{{$answer['id']}}"  type="radio" name="q1" /> {{ $answer['option_value'] }}
                                             </label>
-                                            <label class="list-group-item">
-                                                <input class="form-check-input me-2"  type="radio" name="q1" /> 3
-                                            </label>
-                                            <label class="list-group-item">
-                                                <input class="form-check-input me-2"  type="radio" name="q1" /> 4
-                                            </label>
-                                            <label class="list-group-item">
-                                                <input class="form-check-input me-2"  type="radio" name="q1" /> 5
-                                            </label>
+                                        @endforeach
+                                           
                                         </div>
 
                                         <div class="d-flex justify-content-between mt-3">
