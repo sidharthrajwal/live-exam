@@ -22,7 +22,7 @@ class LoginController extends Controller
    public function authenticationuser(Request $request )
    {
     
-   
+
        $validate   =    $request->validate([
         'terms'   => 'required'
        ]);

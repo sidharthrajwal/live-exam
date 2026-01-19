@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\DashboardController;
 
+use App\Events\ExamStarted;
 use App\Http\Controllers\Controller;
 use App\Models\ExamList;
 use App\Models\ExamRoom;
@@ -44,8 +45,10 @@ class ExamRoomController extends Controller
         $questions = Questions::with(['answers' => function ($query) {
             $query->select('id', 'question_id', 'option_value', 'c_answer');
         }])
+        
             ->where('exam_id', $this->examId)
             ->get();
+            $exam_room_total_questions = $questions->count();
 
         Redis::set('questions', json_encode($questions));
 
@@ -79,6 +82,7 @@ class ExamRoomController extends Controller
               
                 $option_id = $questions->answers->where('c_answer', true)->first()->id;
                 $exam_room_duration = sprintf('%02d:00', $exam->exam_duration);
+                $exam_room_start_time = $exam->exam_start_time;
                 $exam_room_subject_name = $exam->subject_name;
             }
         }
@@ -87,6 +91,7 @@ class ExamRoomController extends Controller
             'joined_subjects',
             'exam_room_code',
             'exam_room_duration',
+            'exam_room_start_time',
             'exam_room_subject_name',
             'booked_slot_count',
             'questions',
@@ -94,14 +99,16 @@ class ExamRoomController extends Controller
             'remarked_question',
             'saved_question',
             'question_id',
-            'question_title'
+            'question_title',
+            'exam_room_total_questions'
         ));
     }
 
     public function ChangeQuestions(Request $request)
     {
+    
         $index = $request->index;
-        // dd($index);
+        
         $questions = Redis::get('questions');
 
         $questions = json_decode($questions, true);
@@ -122,33 +129,33 @@ class ExamRoomController extends Controller
         return response()->json(['current_question' => $current_question, 'current_options' => $current_options, ]);
     }
 
-   public function SubmitAnswer(Request $request)
-{
-    $examRoom = ExamRoom::where('user_id', auth()->id())
-        ->where('exam_id', $this->exam_room->exam_id)
-        ->firstOrFail();
-
-    $saved = $examRoom->is_saved ?? [];
-
-    if (in_array((int) $request->index, $saved, true)) {
-        return response()->json([
-            'remark_added' => false,
-            'marked_questions' => $examRoom->is_marked ?? [],
-            'error_view' => view('components.erroralert-msg', [
-                'msg' => 'Question already saved'
-            ])->render()
-        ]);
+    public function SubmitAnswer(Request $request)
+    {
+        $examRoom = ExamRoom::where('user_id', auth()->id())
+            ->where('exam_id', $this->exam_room->exam_id)
+            ->firstOrFail();
+    
+        $saved = $examRoom->is_saved ?? [];
+    
+        if (in_array((int) $request->index, $saved, true)) {
+            return response()->json([
+                'remark_added' => false,
+                'marked_questions' => $examRoom->is_marked ?? [],
+                'error_view' => view('components.erroralert-msg', [
+                    'msg' => 'Question already saved'
+                ])->render()
+            ]);
+        }
+    
+        if ($request->marked_value === 'review_makred') {
+            return $this->ReviewMarked($request, $examRoom);
+        }
+    
+        if ($request->marked_value === 'save_answer') {
+            return $this->SaveAnswer($request, $examRoom);
+        }
     }
-
-    if ($request->marked_value === 'review_makred') {
-        return $this->ReviewMarked($request, $examRoom);
-    }
-
-    if ($request->marked_value === 'save_answer') {
-        return $this->SaveAnswer($request, $examRoom);
-    }
-}
-
+    
     public function ReviewMarked(Request $request, ExamRoom $examRoom)
     {
         [$updatedList, $errorView] = $this->updateList(
@@ -156,75 +163,74 @@ class ExamRoomController extends Controller
             (int) $request->index,
             'Question marked for review'
         );
-
+    
         $examRoom->update(['is_marked' => $updatedList]);
-
+    
         return response()->json([
             'remark_added' => true,
             'marked_questions' => $updatedList,
             'error_view' => $errorView
         ]);
     }
-
+    
     public function SaveAnswer(Request $request, ExamRoom $examRoom)
     {
-         
-
-         $user_score = [];     
-
-        $marked = $examRoom->is_marked ?? [];
         $index = (int) $request->index;
-        
+        $marked = $examRoom->is_marked ?? [];
+    
         if (in_array($index, $marked, true)) {
             $updatedMarked = array_values(array_diff($marked, [$index]));
             $examRoom->update(['is_marked' => $updatedMarked]);
         }
-
+    
         [$updatedList, $errorView] = $this->updateList(
             $examRoom->is_saved ?? [],
             $index,
-            'Question saved'
+            'Question saved',
+            true
         );
-     
-        $examRoom->update(['is_saved' => $updatedList]);
-
-        $examRoomAnswer = answers::where('id', $request->option_id)->select('c_answer')->first();
-      
-$user_score = [];
-
-if ($examRoomAnswer === $request->answer) {
-    $user_score[] = 'correct';
-} else {
-    $user_score[] = 'wrong';
-}
-
-
-      Redis::set('c_answer',json_encode($user_score));
-
-    $c_answer = json_decode(Redis::get('c_answer'), true);
     
-
-
+        $examRoom->update(['is_saved' => $updatedList]);
+    
+        $examRoomAnswer = answers::where('id', $request->option_id)
+            ->select('c_answer')
+            ->first();
+    
+        $user_score = json_decode(Redis::get('c_answer') ?? '{}', true);
+        $user_score[$index] = ($examRoomAnswer && $examRoomAnswer->c_answer == $request->answer) ? 'correct' : 'wrong';
+        Redis::set('c_answer', json_encode($user_score));
+    
         return response()->json([
             'question_saved' => true,
             'saved_questions' => $updatedList,
             'error_view' => $errorView,
-            'c_answer' => $c_answer
+            'c_answer' => $user_score
         ]);
     }
-
-    private function updateList(array $list, int $index, string $message): array
+    
+    private function updateList(array $list, int $index, string $message, bool $forceAdd = false, string $type = 'info'): array
     {
-        if (!in_array($index, $list, true)) {
-          
+        if ($forceAdd || !in_array($index, $list, true)) {
             $list[] = $index;
-            $view = view('components.successalert-msg', ['msg' => $message])->render();
+            if ($type === 'success') {
+                $view = view('components.successalert-msg', ['msg' => $message])->render();
+            } elseif ($type === 'warning') {
+                $view = view('components.warningalert-msg', ['msg' => $message])->render();
+            } else {
+                $view = view('components.infoalert-msg', ['msg' => $message])->render();
+            }
         } else {
-          
             $list = array_values(array_diff($list, [$index]));
-            $view = view('components.erroralert-msg', ['msg' => $message])->render();
+            if ($type === 'success') {
+                $view = view('components.successalert-msg', ['msg' => $message])->render();
+            } elseif ($type === 'warning') {
+                $view = view('components.warningalert-msg', ['msg' => $message])->render();
+            } else {
+                $view = view('components.infoalert-msg', ['msg' => $message])->render();
+            }
         }
-
+    
         return [$list, $view];
     }
+    
 }

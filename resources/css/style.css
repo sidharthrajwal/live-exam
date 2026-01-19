@@ -523,3 +523,20 @@ button.active-saved {
   font-size: 0.7rem !important;
   background-color: none !important;
 }
+
+h2#question {
+  font-size: larger;
+}
+
+.heading-container
+{
+
+  display: flex;
+    flex: 0 0 auto;
+    gap: 11px;
+}
+
+.qus-count
+{
+  font-weight:700;
+}

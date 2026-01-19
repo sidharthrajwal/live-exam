@@ -3,7 +3,7 @@ import $ from 'jquery';
 
 $('#marked_value').on('click', function (e) {
     e.preventDefault();
-    const index = $('p#question').attr('data-question-index');
+    const index = $('h2#question').attr('data-question-index');
     const examCode = $(this).data('exam-code');
     const value = $(this).val();
 
@@ -44,6 +44,10 @@ async function marksaveQuestion(currentValue, exam_code, index, option_id) {
                 console.log('sadasds');
             }
             $('#alert-wrapper').html(data.error_view);
+
+            setTimeout(() => {
+                $('#alert-wrapper').html('');
+            }, 1000);
         })
 
     } catch (error) {

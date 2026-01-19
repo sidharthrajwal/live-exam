@@ -37,11 +37,18 @@
                             </div>
                         </div>
                     </div>
+                   
 
                     <!-- Edit Exam Form -->
                     <div class="row mb-4">
                         <div class="col-lg-8">
                             <div class="card p-4">
+                            @if(session()->has('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
                                 <h5 class="text-primary mb-4">Edit Exam Details</h5>
                                 <form action="{{route('admin.manage-exam.update', $exam_detail->id)}}" method="POST">
                                     @csrf
@@ -50,42 +57,70 @@
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Subject Name</label>
-                                                <input type="text" class="form-control" value="{{$exam_detail->subject_name}}" required>
+                                                <input type="text" class="form-control" name="subject_name" value="{{$exam_detail->subject_name}}" >
+                                            @error('subject_name')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Subject Code</label>
-                                                <input type="text" class="form-control" value="{{$exam_detail->subject_code}}" required>
+                                                <input type="text" class="form-control" name="subject_code" value="{{$exam_detail->subject_code}}" >
+                                            @error('subject_code')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                             </div>
                                         </div>
                                     </div>
+                                   
                                     <div class="row">
+                                    <div class="col-md-6">
+                                    <div class="mb-3">
+                                                <label class="form-label">Start Date</label>
+                                                <input type="date" class="form-control" name="start_date" value="{{$exam_detail->start_date}}" placeholder="{{$exam_detail->start_date}}" >
+                                            @error('start_date')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                            </div>
+                                        </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Duration (minutes)</label>
-                                                <input type="number" class="form-control" value="{{$exam_detail->exam_duration}}" required>
+                                                <input type="number" class="form-control" name="exam_duration" value="{{$exam_detail->exam_duration}}"  >
+                                            @error('exam_duration')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Start Date</label>
-                                                {{$exam_detail->start_date}}
-                                                <input type="date" class="form-control" value="{{$exam_detail->start_date}}" placeholder="{{$exam_detail->start_date}}" required>
-                                            </div>
-                                        </div>
+                                       
                                     </div>
+                                    <div class="row">
+                                    <div class="col-md-6">
+                                    <div class="mb-3">
+                                                <label class="form-label">Exam Start Time</label>
+                                                <input type="time" class="form-control" name="exam_start_time" value="{{$exam_detail->exam_start_time}}" >
+                                            @error('exam_start_time')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                            </div>
+                                         
+                                        </div>
                                  
-
+<div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Status</label>
                                         @php $exam_status =  ['active', 'upcoming', 'completed', 'pending']; @endphp
-                                        <select class="form-select" required>
+                                        <select class="form-select" name="exam_status" >
                                             @foreach ($exam_status as $status)
                                             <option value="{{$status}}" {{$exam_detail->status == $status ? 'selected' : ''}}>{{$status}}</option>
                                             @endforeach
                                         </select>
-                                    
+                                    @error('exam_status')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                    </div>
+                                    </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Update Exam</button>
                                 </form>

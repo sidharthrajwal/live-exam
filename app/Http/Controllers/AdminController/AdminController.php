@@ -100,8 +100,34 @@ class AdminController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        dd($request->all());
+
+       
+        $exam_data = $request->validate([
+            'subject_name'     => 'required|string',
+            'subject_code'     => 'required|string',
+            'exam_duration'    => 'required|integer',
+            'start_date'       => 'required|date',
+            'exam_start_time'  => 'required',
+            'exam_status'           => 'required|in:active,upcoming,completed,pending',
+        ]);
+        
+    
+        $exam = ExamList::findOrFail($id);
+       
+      
+        ExamList::where('id', $id)->update([
+            'subject_name'  => $exam_data['subject_name'],
+            'subject_code'  => $exam_data['subject_code'],
+            'exam_duration' => $exam_data['exam_duration'],
+            'start_date'    => $exam_data['start_date'],
+            'exam_start_time'    => $exam_data['exam_start_time'],
+            'status'   => $exam_data['exam_status'],
+        ]);
+        
+    
+        return redirect()->back()->with('success', 'Exam updated successfully');
     }
+    
 
     /**
      * Remove the specified resource from storage.

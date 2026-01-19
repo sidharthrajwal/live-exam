@@ -8,11 +8,12 @@ async function loadNextQuestion(index, exam_code) {
     },
     body: JSON.stringify({ index, exam_code })
   });
-  console.log(response);
+  // console.log(response);
   const data = await response.json();
   if (data.current_question !== null) {
-    console.log('success');
-    $('h2#question').text(data.current_question).attr('data-question-index', index + 1);
+
+    $('.qus-count').text(`Q.${index + 1}`);
+    $('h2#question').text(data.current_question).attr('data-question-index', index);
     $('.list-group').empty();
     data.current_options.forEach((answer) => {
       $('.list-group').append(`
@@ -22,13 +23,20 @@ async function loadNextQuestion(index, exam_code) {
           </label>
         `);
     });
+
   } else {
     $('#alert-wrapper').html(data.error_view);
 
+    idx = Math.max(0, idx - 1);
+    updateIndex(idx);
+    loadNextQuestion(idx, getExamCode());
+    setTimeout(() => {
+      $('#alert-wrapper').html('');
+    }, 1000);
   }
 }
 
-let idx = Number($('p#question').attr('data-question-index')) || 0;
+let idx = Number($('h2#question').attr('data-question-index')) || 0;
 
 $('#nextBtn').on('click', function (e) {
   e.preventDefault();
@@ -47,16 +55,17 @@ $('#prevBtn').on('click', function (e) {
 });
 
 function updateIndex(index) {
-  $('p#question').attr('data-question-index', index);
+  $('h2#question').attr('data-question-index', index);
 }
 
 function getExamCode() {
-  return $('p#question').attr('data-exam-code');
+  return $('h2#question').attr('data-exam-code');
 }
 
 
 $('.change-question').on('click', (e) => {
   e.preventDefault();
   var idx = Number($(e.target).data('index')) || 0;
-  loadNextQuestion(idx, $('p#question').data('exam-code'));
+  loadNextQuestion(idx, $('h2#question').data('exam-code'));
 });
+

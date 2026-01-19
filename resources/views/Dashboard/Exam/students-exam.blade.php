@@ -90,8 +90,8 @@
                                 <small class="text-muted">Subject:  {{ $exam_room_subject_name}} · Code: {{ $exam_room_code }}</small>
                             </div>
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-secondary p-2"><i class="fa fa-question-circle me-1"></i> 20 Questions</span>
-                                <span class="badge bg-primary p-2" id="exam-timer" data-duration="3600"><i class="fa fa-hourglass-half me-1"></i> {{ $exam_room_duration}}</span>
+                                <span class="badge bg-secondary p-2"><i class="fa fa-question-circle me-1"></i> {{ $exam_room_total_questions }} Questions</span>
+                                <span class="badge bg-primary p-2" id="exam-timer" data-start="{{ $exam_room_start_time }}" data-duration="3600"><i class="fa fa-hourglass-half me-1"></i> {{ $exam_room_duration}}</span>
                                 <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#leaveExamModal"><i class="fa fa-sign-out-alt me-2"></i>Leave</button>
                             </div>
                         </div>
@@ -126,8 +126,9 @@
 
 
                 
-
-                                        <h2 id="question" data-question-index="0"  data-exam-code="{{$exam_room_code}}" data-question-id="{{$question_id}}"  class="mb-3">{{ $question_title }}</h2>
+<div class="heading-container"><span  class="qus-count">Q.1</span>
+                                        <h2 id="question" data-question-index="1"  data-exam-code="{{$exam_room_code}}" data-question-id="{{$question_id}}"  class="mb-3">{{ $question_title }}</h2>
+                                        </div>
                                         <div class="list-group">
 
                                         @foreach ($questions['answers'] as $answer)
@@ -212,38 +213,100 @@
 
     <!-- Content End -->
 </div>
-<!-- End Container Fluid -->
 
-@vite(['resources/js/question-answer.js'])
+<div id="countdown" bis_skin_checked="1">
+    <div class="countdown-message" bis_skin_checked="1">
+        <i class="fa fa-check-circle me-3"></i><h2>Exam Started!</h2></div></div>
+
 @vite(['resources/js/exam-room.js'])
+@vite(['resources/js/question-answer.js'])
+
 @push('scripts')
-<script>
-    // Simple countdown display (UI only)
-    document.addEventListener('DOMContentLoaded', function () {
-        const timerEl = document.getElementById('exam-timer');
-        if (!timerEl) return;
-        let remaining = parseInt(timerEl.getAttribute('data-duration'), 10) || 0;
-
-        function format(sec){
-            const m = Math.floor(sec / 60).toString().padStart(2, '0');
-            const s = (sec % 60).toString().padStart(2, '0');
-            return `${m}:${s}`;
-        }
-
-        timerEl.innerHTML = `<i class="fa fa-hourglass-half me-1"></i> ${format(remaining)}`;
-        const iv = setInterval(() => {
-            remaining--;
-            if (remaining <= 0) {
-                clearInterval(iv);
-                timerEl.classList.remove('bg-primary');
-                timerEl.classList.add('bg-danger');
-                timerEl.innerHTML = `<i class=\"fa fa-hourglass-end me-1\"></i> 00:00`;
-                return;
-            }
-            timerEl.innerHTML = `<i class=\"fa fa-hourglass-half me-1\"></i> ${format(remaining)}`;
-        }, 1000);
-    });
+<script >
+       if(typeof Echo !== 'undefined'){ 
+        Echo.private('exam-started')
+        .listen('ExamStarted', (e) => {
+            console.log('Exam started');
+            console.log(e.message);
+        });
+    }else{
+        console.log('Echo is not defined');
+    }
 </script>
+
 @endpush
 
 @endsection
+
+<style>
+    #countdown {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        z-index: 9999;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    #countdown.active {
+        display: flex;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .countdown-timer {
+        font-size: 8rem;
+        font-weight: 800;
+        color: #2c3e50;
+        text-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        margin-bottom: 20px;
+    }
+
+    .countdown-label {
+        font-size: 2rem;
+        color: #555;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        font-weight: 500;
+        margin-bottom: 0;
+    }
+
+    .countdown-message {
+        font-size: 3rem;
+        color: #28a745;
+        font-weight: 700;
+        animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes scaleUp {
+        from { transform: scale(0.5); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Pulse animation for last 5 seconds */
+    .pulse {
+        animation: pulse 1s infinite;
+        color: #dc3545;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+</style>

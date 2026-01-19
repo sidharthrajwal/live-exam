@@ -23,14 +23,16 @@
     <!-- Libraries Stylesheet -->
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+   @vite(['resources/js/app.js'])
+
     @vite(['resources/css/style.css', 'resources/css/bootstrap.min.css'])
-    
+   
 </head>
 
 <body>
     @yield('content')
  <!-- Footer Start -->
- <div class="container-fluid pt-4 px-4">
+ <div class="container pt-4 px-4">
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
@@ -62,6 +64,7 @@
     <script src="lib/tempusdominus/js/moment.min.js"></script>
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+  
     @vite(['resources/js/main.js'])
     @stack('scripts')
 

@@ -18,6 +18,7 @@ class ExamList extends Model
         // 'exam_room',
         'start_date',
         'status',
+        'exam_start_time',
 
     ];
 

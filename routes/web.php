@@ -1,5 +1,5 @@
 <?php
-
+use App\Events\ExamStarted;
 use App\Http\Controllers\AdminController\AdminController;
 use App\Http\Controllers\AdminController\QuestionController;
 use App\Http\Controllers\DashboardController\ExamRoomController;
@@ -7,10 +7,17 @@ use App\Http\Controllers\DashboardController\LoginController;
 use App\Http\Controllers\DashboardController\RegisterController;
 use App\Http\Controllers\DashboardController\SlotbookingController;
 use App\Http\Controllers\DashboardController\StudentProfileController;
-use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Facades\Route;
+Broadcast::routes();
+
+Route::get('/send-test', function () {
+    event(new ExamStarted('Hello, this is a real-time message!'));
+    return 'Event has been sent!';
+});
 Route::get('/', function () {
     return view('FrontView.login');
+  
 });
 
 // Authenticate User \\

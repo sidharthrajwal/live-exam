@@ -49,7 +49,15 @@
                                         <label class="form-label">Subject Code</label>
                                         <input type="text" class="form-control" name="exam_code" required>
                                     </div>
-
+                                    <div class="mb-3">
+                                        <label class="form-label">Exam Date</label>
+                                        <input type="date" class="form-control" name="exam_date" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Exam Start Time</label>
+                                        <input type="time" class="form-control" name="exam_start_time" required>
+                                    </div>
+                                   
                                     <div class="mb-3">
                                         <label class="form-label">Duration</label>
                                         <select class="form-select" name="exam_duration" required>
