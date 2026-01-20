@@ -83,6 +83,7 @@ class ExamRoomController extends Controller
                 $option_id = $questions->answers->where('c_answer', true)->first()->id;
                 $exam_room_duration = sprintf('%02d:00', $exam->exam_duration);
                 $exam_room_start_time = $exam->exam_start_time;
+                $exam_room_id = $exam->id;
                 $exam_room_subject_name = $exam->subject_name;
             }
         }
@@ -100,7 +101,9 @@ class ExamRoomController extends Controller
             'saved_question',
             'question_id',
             'question_title',
-            'exam_room_total_questions'
+            'exam_room_total_questions',
+            'exam_room_id'
+            
         ));
     }
 

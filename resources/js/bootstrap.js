@@ -31,54 +31,76 @@ console.log('Echo CREATED', window.Echo);
 
 // Timer variable to control the interval
 let timer;
-const examStart = "16:35:00";
+let countdownInterval = null;
+function startExamTimer() {
 
-/* Convert "HH:MM:SS" → Date */
-function getExamStartDate() {
-    const [h, m, s] = examStart.split(':').map(Number);
-    const date = new Date();
-    date.setHours(h, m, s, 0);
-    return date;
+    const timerEl = document.getElementById('exam-timer');
+    const duration = timerEl.dataset.duration;
+    if (!duration) return;
+    let [m, s] = duration.split(':').map(Number);
+    let totalSeconds = m * 60 + s;
+    countdownInterval = setInterval(() => {
+        totalSeconds--;
+
+        if (totalSeconds <= 0) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+
+
+            return;
+        }
+
+        const currentMinutes = Math.floor(totalSeconds / 60);
+        const currentSeconds = totalSeconds % 60;
+        timerEl.textContent = `${currentMinutes}:${currentSeconds < 10 ? '0' : ''}${currentSeconds}`;
+    }, 1000);
 }
 
-function updateCountdown() {
+function startCountdown() {
+
     const countdownEl = document.getElementById('countdown');
     const timerDisplay = countdownEl?.querySelector('.countdown-message');
     if (!countdownEl || !timerDisplay) return;
 
-    const examStartDate = getExamStartDate();
-    const currentTime = new Date();
-    const diff = examStartDate - currentTime;
+    if (timer) clearTimeout(timer);
 
-    // Exam started
-    if (diff <= 0) {
-        countdownEl.classList.remove('active');
-        clearInterval(timer);
-        console.log('Exam Started');
-        return;
-    }
-
-    // Countdown active
-    const secondsLeft = Math.ceil(diff / 1000);
     countdownEl.classList.add('active');
-    timerDisplay.innerHTML = `<h2>${secondsLeft}</h2>`;
+    timerDisplay.innerHTML = `<h2>10</h2>`;
+
+    let secondsLeft = 10;
+    const interval = setInterval(() => {
+        secondsLeft--;
+        timerDisplay.innerHTML = `<h2>${secondsLeft}</h2>`;
+
+        if (secondsLeft <= 0) {
+            clearInterval(interval);
+        }
+    }, 1000);
+
+
+    timer = setTimeout(() => {
+        countdownEl.classList.remove('active');
+        startExamTimer();
+    }, 10000);
 }
 
-function startCountdown() {
-    if (timer) clearInterval(timer);
-    updateCountdown();
-    timer = setInterval(updateCountdown, 1000);
+
+const examId = document.getElementById('exam-timer')?.dataset.examId;
+
+if (examId) {
+    window.Echo
+        .channel(`exam.${examId}`)
+        .listen('.ExamStarted', (e) => {
+            console.log('Exam event received:', e);
+
+            if (e.message === 'exam started') {
+                startCountdown();
+            }
+
+            if (e.message === 'exam ended') {
+                if (typeof timer !== 'undefined') clearTimeout(timer);
+                document.getElementById('countdown')?.classList.remove('active');
+            }
+        });
 }
-window.Echo.channel('exam-started')
-    .listen('.ExamStarted', (e) => {
-        console.log('Exam event received:', e.message);
 
-        if (e.message === 'exam started') {
-            startCountdown();
-        }
-
-        if (e.message === 'exam ended') {
-            clearInterval(timer);
-            document.getElementById('countdown')?.classList.remove('active');
-        }
-    });

@@ -20,7 +20,6 @@ class StartExam extends Command
 
         Log::info('Current Time: ' . $now->format('H:i:s'));
 
-        // Fetch exams that should already be running
         $exams = ExamList::whereTime('exam_start_time', '>=', $now->format('H:i:s'))->get();
 
         Log::info('Found ' . $exams->count() . ' exams.');
@@ -37,16 +36,16 @@ class StartExam extends Command
 
             // Exam ended
             if ($minutesPassed >= $exam->exam_duration) {
-                event(new ExamStarted('exam ended'));
+                event(new ExamStarted( $exam,'exam ended'));
                 Log::info('Exam ended event fired');
             } 
             // Exam running
-           
+              
             elseif($now->greaterThanOrEqualTo($examStart)) {
-                event(new ExamStarted('exam started'));
+                event(new ExamStarted($exam,'exam started'));
                 Log::info('Exam started event fired');
             }
-             Log::info("new", $now->greaterThanOrEqualTo($examStart));
+            // Log::info("new", $now->greaterThanOrEqualTo($examStart));
         }
 
         $this->info('Exam scheduler executed successfully.');

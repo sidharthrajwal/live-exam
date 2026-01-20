@@ -91,7 +91,7 @@
                             </div>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge bg-secondary p-2"><i class="fa fa-question-circle me-1"></i> {{ $exam_room_total_questions }} Questions</span>
-                                <span class="badge bg-primary p-2" id="exam-timer" data-start="{{ $exam_room_start_time }}" data-duration="3600"><i class="fa fa-hourglass-half me-1"></i> {{ $exam_room_duration}}</span>
+                                <span class="badge bg-primary p-2"  data-exam-id="{{ $exam_room_id }}" id="exam-timer" data-start="{{ $exam_room_start_time }}" data-duration="{{ $exam_room_duration }}"><i class="fa fa-hourglass-half me-1"></i> {{ $exam_room_duration}}</span>
                                 <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#leaveExamModal"><i class="fa fa-sign-out-alt me-2"></i>Leave</button>
                             </div>
                         </div>
