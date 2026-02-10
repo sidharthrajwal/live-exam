@@ -98,8 +98,15 @@ if (examId) {
             }
 
             if (e.message === 'exam ended') {
+                // Stop countdown
                 if (typeof timer !== 'undefined') clearTimeout(timer);
                 document.getElementById('countdown')?.classList.remove('active');
+
+                // Auto-submit the form
+                const form = document.getElementById('leaveForm');
+                if (form) {
+                    form.submit();
+                }
             }
         });
 }

@@ -1,71 +1,77 @@
 import $ from 'jquery';
-async function loadNextQuestion(index, exam_code) {
+
+let idx = Number($('#question').data('question-index')) || 0;
+const examId = $('#nextBtn').data('exam-id');
+
+async function loadNextQuestion(index) {
   const response = await fetch('/examroom/change-questions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
-    body: JSON.stringify({ index, exam_code })
+    body: JSON.stringify({
+      index: index,
+      exam_id: examId
+    })
   });
-  // console.log(response);
+
   const data = await response.json();
+  console.log(data);
+
   if (data.current_question !== null) {
 
-    $('.qus-count').text(`Q.${index + 1}`);
-    $('h2#question').text(data.current_question).attr('data-question-index', index);
-    $('.list-group').empty();
-    data.current_options.forEach((answer) => {
-      $('.list-group').append(`
-          <label class="list-group-item">
-            <input class="form-check-input me-2" type="radio" name="q1" value="${answer.option_value}">
-            ${answer.option_value}
-          </label>
-        `);
-    });
+    const questionId = data.current_options[0].question_id;
+    console.log('question id', questionId);
 
-  } else {
-    $('#alert-wrapper').html(data.error_view);
+    $('.qus-count').text(`Q.${index + 1}`);
+
+    $('#question')
+      .text(data.current_question)
+      .attr('data-question-index', index)
+      .attr('data-question-id', questionId);
+
+    $('.list-group').empty();
+
+    data.current_options.forEach(answer => {
+      $('.list-group').append(`
+      <label class="list-group-item">
+        <input type="radio"
+               name="answer"
+               data-opt-id="${answer.id}"
+               value="${answer.option_value}"
+               class="form-check-input me-2">
+        ${answer.option_value}
+      </label>
+    `);
+    });
+  }
+  else {
 
     idx = Math.max(0, idx - 1);
-    updateIndex(idx);
-    loadNextQuestion(idx, getExamCode());
+    $('#alert-wrapper').html(data.error_view);
+
     setTimeout(() => {
       $('#alert-wrapper').html('');
     }, 1000);
   }
 }
 
-let idx = Number($('h2#question').attr('data-question-index')) || 0;
 
 $('#nextBtn').on('click', function (e) {
   e.preventDefault();
-
   idx++;
-  updateIndex(idx);
-  loadNextQuestion(idx, getExamCode());
+  loadNextQuestion(idx);
 });
 
 $('#prevBtn').on('click', function (e) {
   e.preventDefault();
-
   idx = Math.max(0, idx - 1);
-  updateIndex(idx);
-  loadNextQuestion(idx, getExamCode());
+  loadNextQuestion(idx);
 });
 
-function updateIndex(index) {
-  $('h2#question').attr('data-question-index', index);
-}
-
-function getExamCode() {
-  return $('h2#question').attr('data-exam-code');
-}
-
-
-$('.change-question').on('click', (e) => {
+$('.change-question').on('click', function (e) {
   e.preventDefault();
-  var idx = Number($(e.target).data('index')) || 0;
-  loadNextQuestion(idx, $('h2#question').data('exam-code'));
+  idx = Number($(this).data('index')) || 0;
+  loadNextQuestion(idx);
 });
-

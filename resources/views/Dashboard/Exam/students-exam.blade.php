@@ -140,14 +140,14 @@
                                         </div>
 
                                         <div class="d-flex justify-content-between mt-3">
-    <button id="prevBtn" type="button" class="btn btn-outline-secondary btn-sm">
+    <button id="prevBtn" type="button" class="btn btn-outline-secondary btn-sm" data-exam-id="{{$exam_room_id}}">
         <i class="fa fa-arrow-left me-2"></i>Previous
     </button>
     <div class="d-flex gap-2">
         <button type="submit" class="btn btn-outline-warning btn-sm" name="marked_value" id="marked_value" value="review_makred" data-exam-code="{{$exam_room_code}}"><i class="fa fa-flag me-2"></i>Mark for Review</button>
         <button type="submit" class="btn btn-success btn-sm" name="marked_value"  id="submit_answer" data-exam-code="{{$exam_room_code}}" value="save_answer"><i class="fa fa-save me-2"></i>Save Answer</button>
     </div>
-    <button id="nextBtn" type="button" class="btn btn-primary btn-sm">
+    <button id="nextBtn" type="button" class="btn btn-primary btn-sm" data-exam-id="{{$exam_room_id}}">
         Next<i class="fa fa-arrow-right ms-2"></i>
     </button>
 </div>
@@ -157,7 +157,7 @@
 
                                 <!-- Submission -->
                                 <div class="d-flex justify-content-end">
-                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#submitExamModal"><i class="fa fa-paper-plane me-2"></i>Submit Exam</button>
+                                    <button id="submit_exam" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#submitExamModal"><i class="fa fa-paper-plane me-2"></i>Submit Exam</button>
                                 </div>
                             </div>
                             <x-question-count :savedquestion="$saved_question" :questioncount="$remarked_question" />
@@ -171,7 +171,7 @@
         <!-- Leave Exam Modal -->
         <div class="modal fade" id="leaveExamModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <form action="{{ route('leave-slot') }}" method="POST">
+                <form id="leaveForm" action="{{ route('leave-slot') }}" method="POST">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">

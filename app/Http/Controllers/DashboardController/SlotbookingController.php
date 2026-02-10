@@ -50,8 +50,9 @@ class SlotbookingController extends Controller
         $exam_room_status = ExamRoom::where('user_id', $user_id)->first();
       
         $exam = ExamList::where('subject_code', $exam_code)->first();
+        // dd($exam);
 
-        if (is_null($exam)) {
+        if ($exam == null) {
             return response()->json(array('msg'=> 'Exam not found'), 404);
         } 
         

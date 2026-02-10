@@ -11,11 +11,12 @@ class ExamRoom extends Model
     protected $fillable = [
         'exam_id',
         'user_id',
-        'exam_score',
+        'score',
         'subject_code',
         'status',
         'is_marked', 
         'is_saved',
+        'examlivestatus',
     ];
 
     protected $casts = [
