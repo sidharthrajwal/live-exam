@@ -5,20 +5,24 @@ namespace App\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use App\Models\Questions;
 
 class QuestionCount extends Component
 {
 
 
- public array $questioncount;
+
  public array $savedquestion;
+ public array $questionCount;
+ public array $remarkedQuestion;
     /**
      * Create a new component instance.
      */
-    public function __construct(?array $questioncount = null, ?array $savedquestion = null)
+    public function __construct( ?array $savedquestion = null, ?array $questionCount = null, ?array $remarkedQuestion = null)
     {
-        $this->questioncount = $questioncount ?? [];
         $this->savedquestion = $savedquestion ?? [];
+        $this->questionCount = $questionCount ?? [];
+        $this->remarkedQuestion = $remarkedQuestion ?? [];
     }
 
     /**
@@ -27,8 +31,9 @@ class QuestionCount extends Component
     public function render(): View|Closure|string
     {
         return view('components.qustionCount', [
-            'questioncount' => $this->questioncount,
             'savedquestion' => $this->savedquestion,
+            'questionCount' => $this->questionCount,
+            'remarkedQuestion' => $this->remarkedQuestion,
         ]);
     }
 }

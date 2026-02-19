@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController\LoginController;
 use App\Http\Controllers\DashboardController\RegisterController;
 use App\Http\Controllers\DashboardController\SlotbookingController;
 use App\Http\Controllers\DashboardController\StudentProfileController;
+use App\Http\Controllers\DashboardController\LiveScoreController;
 
 use Illuminate\Support\Facades\Route;
 Broadcast::routes();
@@ -37,6 +38,8 @@ Route::resource('profile', (StudentProfileController::class))->names('profile');
 
 // Dashboard \\
 Route::middleware('auth')->group(function () {
+
+    Route::get('/livescore', [LiveScoreController::class, 'saveAnswer'])->name('livescore');
     Route::get('/profile', function () {
         return view('Dashboard.Students.students-profile');
     });
@@ -46,7 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('Dashboard.Students.students-dashboard');
     })->name('dashboard');
-
+    
+    
     Route::get('/examroom', [ExamRoomController::class, 'index'])->name('examroom');
     Route::post('/examroom', [ExamRoomController::class, 'joinSlot']);
     Route::post('/examroom/change-questions', [ExamRoomController::class, 'ChangeQuestions'])->name('examroom.change-questions');

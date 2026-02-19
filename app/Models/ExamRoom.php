@@ -20,11 +20,13 @@ class ExamRoom extends Model
     ];
 
     protected $casts = [
+       
         'is_marked' => 'array',
         'is_saved' => 'array',
     ];
     
     protected $attributes = [
+     
         'is_marked' => '[]',
         'is_saved' => '[]',
     ];

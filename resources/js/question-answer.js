@@ -14,11 +14,20 @@ $('#marked_value').on('click', function (e) {
 
 $('#submit_answer').on('click', function (e) {
     e.preventDefault();
+
     const index = $('h2#question').attr('data-question-index');
     const question_id = $('h2#question').attr('data-question-id');
-    const option_id = $('input[name="q1"]:checked').attr('data-opt-id');
+
+
+    const option_id = $('input[name="answer"]:checked').attr('data-opt-id') || null;
+
     const examCode = $(this).data('exam-code');
     const value = $(this).val();
+
+    if (!option_id) {
+        alert('Please select an answer first!');
+        return;
+    }
 
     marksaveQuestion(value, examCode, index, option_id, question_id);
 });

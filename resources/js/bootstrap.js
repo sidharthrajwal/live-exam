@@ -16,6 +16,8 @@ window.Pusher = Pusher;
 
 if (Echo) {
     console.log('Echo initialized', window.Echo);
+
+
 }
 
 window.Echo = new Echo({
@@ -28,6 +30,19 @@ window.Echo = new Echo({
     enabledTransports: ['ws', 'wss'],
 });
 console.log('Echo CREATED', window.Echo);
+
+
+
+window.Echo.channel('test')
+    .listen('.livescore', (e) => {
+        document.getElementById('liveScore').textContent = e.livescore;
+
+        console.log('Live score received:', e.livescore);
+    });
+
+
+
+
 
 // Timer variable to control the interval
 let timer;

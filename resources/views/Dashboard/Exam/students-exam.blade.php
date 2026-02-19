@@ -112,6 +112,17 @@
                                     </div>
                                 </div>
 
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                    <span>Live Score: <span id="liveScore">{{$livescore}}</span></span>
+                                 <ul>
+                                <li>First person score: <span id="firstAttempt">0</span></li>    
+                                <li>Second person score: <span id="secondAttempt">0</span></li>
+                                <li>Third person score: <span id="thirdAttempt">0</span></li>
+                                    </ul>
+                                    </div>
+                                </div>
+
                                 <!-- Question Card -->
                                 <div class="card mb-3">
                                     <div id="alert-wrapper"></div>
@@ -127,13 +138,13 @@
 
                 
 <div class="heading-container"><span  class="qus-count">Q.1</span>
-                                        <h2 id="question" data-question-index="1"  data-exam-code="{{$exam_room_code}}" data-question-id="{{$question_id}}"  class="mb-3">{{ $question_title }}</h2>
+                                        <h2 id="question" data-question-index="0"  data-exam-code="{{$exam_room_code}}" data-question-id="{{$question_id}}"  class="mb-3">{{ $question_title }}</h2>
                                         </div>
                                         <div class="list-group">
 
                                         @foreach ($questions['answers'] as $answer)
                                             <label class="list-group-item">
-                                                <input class="form-check-input me-2"  data-opt-id="{{$answer['id']}}"  type="radio" name="q1" /> {{ $answer['option_value'] }}
+                                                <input name="answer"class="form-check-input me-2"  data-opt-id="{{$answer['id']}}"  type="radio"  /> {{ $answer['option_value'] }}
                                             </label>
                                         @endforeach
                                            
@@ -160,7 +171,15 @@
                                     <button id="submit_exam" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#submitExamModal"><i class="fa fa-paper-plane me-2"></i>Submit Exam</button>
                                 </div>
                             </div>
-                            <x-question-count :savedquestion="$saved_question" :questioncount="$remarked_question" />
+
+
+
+   <x-question-count 
+    :savedquestion="$saved_question" 
+    :remarked-question="$remarkedQuestion"
+    :question-count="$questionCount" 
+/>
+
 
                         </div>
                     </div>

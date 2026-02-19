@@ -8,10 +8,13 @@ use App\Models\ExamRoom;
 use App\Models\answers;
 use App\Models\questions;
 use App\Models\User;
+use App\Events\livescore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\View\Component;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 
 class ExamRoomController extends Controller
 {
@@ -20,8 +23,9 @@ class ExamRoomController extends Controller
     public $joined_subjects;
     public $examId;
     public $exam_room;
+    public $livescore;
 
-    public array $remarked_question;
+    public array $remarkedQuestion;
 
     public function __construct()
     {
@@ -33,6 +37,7 @@ class ExamRoomController extends Controller
                 $this->joined_subjects[] = $room['subject_code'];
             }
         }
+
         $this->exam_room = ExamRoom::where('user_id', $student_id)->first();
     }
 
@@ -51,18 +56,18 @@ class ExamRoomController extends Controller
         
             ->where('exam_id', $this->examId)
             ->get();
-            $exam_room_total_questions = $questions->count();
+
+        $exam_room_total_questions = $questions->count();
 
         Redis::set('questions'. $this->examId, json_encode($questions));
 
         // / Retrieve
         $data = json_decode(Redis::get('questions'. $this->examId), true);
 
-        // dd($data);
 
         $student_id = auth()->id();
-        $remarked_question = $this->exam_room->is_marked;
-
+        $remarkedQuestion = $this->exam_room->is_marked;
+        $questionCount = null;
         $saved_question = $this->exam_room->is_saved;
         $exam_room_code = null;
         $question_id = null;
@@ -70,11 +75,13 @@ class ExamRoomController extends Controller
         $exam_room_duration = null;
         $exam_room_subject_name = null;
         $joined_subjects = $this->joined_subjects ?? [];
+        $livescore = null;
 
         $booked_slot_count = null;
 
         if ($this->exam_room) {
             $booked_slot_count = ExamRoom::where('status', 'joined')->where('exam_id', $this->examId)->count();
+           
             $exam = ExamList::find($this->examId);
 
             if ($exam) {
@@ -87,7 +94,9 @@ class ExamRoomController extends Controller
                 $exam_room_duration = sprintf('%02d:00', $exam->exam_duration);
                 $exam_room_start_time = $exam->exam_start_time;
                 $exam_room_id = $exam->id;
+                $livescore = $examroom->score;
                 $exam_room_subject_name = $exam->subject_name;
+                $questionCount = Questions::get()->where('exam_id', $this->examId)->all();
             }
         }
 
@@ -98,14 +107,16 @@ class ExamRoomController extends Controller
             'exam_room_start_time',
             'exam_room_subject_name',
             'booked_slot_count',
+            'questionCount',
             'questions',
             'option_id',
-            'remarked_question',
+            'remarkedQuestion',
             'saved_question',
             'question_id',
             'question_title',
             'exam_room_total_questions',
-            'exam_room_id'
+            'exam_room_id',
+            'livescore'
             
         ));
     }
@@ -132,6 +143,7 @@ public function ChangeQuestions(Request $request)
     }
 
     $questions = json_decode($questions, true);
+  //  dd($questions);
 
     if (!isset($questions[$index])) {
         return response()->json([
@@ -147,6 +159,7 @@ public function ChangeQuestions(Request $request)
         'current_question' => $questions[$index]['question'],
         'current_options'  => $questions[$index]['answers'],
     ]);
+    
 }
 
 
@@ -194,7 +207,7 @@ public function ChangeQuestions(Request $request)
             'Question marked for review'
         );
 
-        $examRoom->update(['is_marked' => $updatedList]);
+       $examRoom->update(['is_marked' => $updatedList]);
     
         return response()->json([
             'remark_added' => true,
@@ -203,63 +216,70 @@ public function ChangeQuestions(Request $request)
         ]);
     }
     
-    public function SaveAnswer(Request $request, ExamRoom $examRoom)
-    {
-      
-          $examquestionid = $request->question_id;
-            $examAnswerId = $request->option_id;
-            
-            $marked = $examRoom->is_marked ?? [];
-       
-            $quesstiondata = Questions::with(['answers' => function ($query) use ($examAnswerId) {
-            $query->where('id', $examAnswerId);
-            }])->where('id', $examquestionid)->first();
-  if($quesstiondata){
-    //   Log::info('Question Data:', $quesstiondata ? $quesstiondata->toArray() : ['question' => null]);   
+public function SaveAnswer(Request $request, ExamRoom $examRoom)
+{
+    $questionId = (int) $request->question_id;
+    $selectedOptionId = (int) $request->option_id;
 
-  
-    }
-         $examroom =  ExamRoom::where('user_id', auth()->id())
-         ->where('exam_id', $this->exam_room->exam_id)
-         ->firstOrFail();
-  
-
-       foreach($quesstiondata->answers as $answer){
-  //dd($examroom->score);
-          if ((int) $answer->c_answer === 1) {
-        $examroom->increment('score', 5);
-    }
-           
-        }
     
-        if (in_array($examquestionid, $marked, true)) {
-            $updatedMarked = array_values(array_diff($marked, [$examquestionid]));
-            $examRoom->update(['is_marked' => $updatedMarked]);
-        }
-    
-        [$updatedList, $errorView] = $this->updateList(
-            $examRoom->is_saved ?? [],
-            $examquestionid,
-            'Question saved',
-            'success',
-            true
-        );
-    
-        $examRoom->update(['is_saved' => $updatedList]);
-    
-        $examRoomAnswer = answers::where('id', $examAnswerId)
-            ->select('c_answer')
-            ->first();
-    
-   
+    if (!$selectedOptionId) {
         return response()->json([
-            'question_saved' => true,
-            'saved_questions' => $updatedList,
-            'error_view' => $errorView,
-          //  'c_answer' => $user_score
+            'question_saved' => false,
+            'error_view' => view('components.erroralert-msg', ['msg' => 'No option selected'])->render()
         ]);
     }
+
+    $question = Questions::with('answers')->findOrFail($questionId);
+
+    $correctAnswer = $question->answers->firstWhere('c_answer', 1);
+
+    $isCorrect = $correctAnswer && (int)$correctAnswer->id === $selectedOptionId;
+
+    if ($isCorrect) {
+        $examRoom->increment('score', 10);
+    }
+    $marked = $examRoom->is_marked ?? [];
+    if (in_array($questionId, $marked, true)) {
+        $marked = array_values(array_diff($marked, [$questionId]));
+        $examRoom->is_marked = $marked;
+    }
+
+    $saved = $examRoom->is_saved ?? [];
+    if (!in_array($questionId, $saved, true)) {
+        $saved[] = $questionId;
+        $examRoom->is_saved = $saved;
+    }
+
+
+    $examRoom->save();
+
+    [$updatedList, $errorView] = $this->updateList(
+        $saved,
+        $questionId,
+        'Question saved',
+        true,
+        'success'
+    );
+
+
     
+  $response = response()->json([
+        'question_saved'  => true,
+        'saved_questions' => $updatedList,
+        'error_view'      => $errorView,
+        'was_correct'     => $isCorrect,
+        'current_score'   => (int) $examRoom->score,
+    ]);
+
+    if($response){
+        $livescore = new livescore($examRoom->score);
+        broadcast($livescore)->toOthers();
+    }
+    return $response;
+
+  
+    
+}
     private function updateList(array $list, int $question_id, string $message, bool $forceAdd = false, string $type = 'info'): array
     {
         if ($forceAdd || !in_array($question_id, $list, true)) {

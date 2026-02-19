@@ -61,6 +61,7 @@ async function loadNextQuestion(index) {
 $('#nextBtn').on('click', function (e) {
   e.preventDefault();
   idx++;
+  console.log(idx);
   loadNextQuestion(idx);
 });
 

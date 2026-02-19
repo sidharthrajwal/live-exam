@@ -11,13 +11,14 @@
      </div>
      <div class="row g-2">
 
-    
-
-         @for($i=1; $i<=20; $i++)
-         
+   @php $forcount = 1; @endphp
+   @if(isset($questionCount))
+         @foreach($questionCount as $key => $question)
              <div class="col-3">
-                 <button data-index="{{$i}}" class="btn btn-sm w-100 btn-outline-secondary {{ in_array($i, $savedquestion) ? 'active-saved' : '' }} {{ in_array($i, $questioncount) ? 'active-marked' : '' }} change-question">{{$i}}</button>
+             <button data-index="{{$forcount-1}}" class="btn btn-sm w-100 btn-outline-secondary {{ in_array($question->id, $savedquestion) ? 'active-saved' : '' }} {{ in_array($question->id, $remarkedQuestion) ? 'active-marked' : '' }} change-question">{{$forcount}}</button>
              </div>
-         @endfor
-     </div>
- </div>
+    @php $forcount++ @endphp
+         @endforeach
+   @endif     </div>
+ </div> 
+ 
