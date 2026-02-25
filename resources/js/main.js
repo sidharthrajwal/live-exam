@@ -2,7 +2,7 @@
 import $ from 'jquery';
 
 $(function () {
-console.log('sadsd')
+    console.log('sadsd')
     // Spinner
     // $('.form-check-input').click(function () {
     //     $('.form-check-input').each(function () {
@@ -19,8 +19,8 @@ console.log('sadsd')
         }, 1);
     };
     spinner();
-    
-    
+
+
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 300) {
@@ -30,7 +30,7 @@ console.log('sadsd')
         }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
         return false;
     });
 
@@ -47,7 +47,7 @@ console.log('sadsd')
         $('.progress .progress-bar').each(function () {
             $(this).css("width", $(this).attr("aria-valuenow") + '%');
         });
-    }, {offset: '80%'});
+    }, { offset: '80%' });
 
 
     // Calender
@@ -64,7 +64,7 @@ console.log('sadsd')
         items: 1,
         dots: true,
         loop: true,
-        nav : false
+        nav: false
     });
 
 
@@ -75,22 +75,22 @@ console.log('sadsd')
         data: {
             labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
             datasets: [{
-                    label: "USA",
-                    data: [15, 30, 55, 65, 60, 80, 95],
-                    backgroundColor: "rgba(0, 156, 255, .7)"
-                },
-                {
-                    label: "UK",
-                    data: [8, 35, 40, 60, 70, 55, 75],
-                    backgroundColor: "rgba(0, 156, 255, .5)"
-                },
-                {
-                    label: "AU",
-                    data: [12, 25, 45, 55, 65, 70, 60],
-                    backgroundColor: "rgba(0, 156, 255, .3)"
-                }
-            ]
+                label: "USA",
+                data: [15, 30, 55, 65, 60, 80, 95],
+                backgroundColor: "rgba(0, 156, 255, .7)"
             },
+            {
+                label: "UK",
+                data: [8, 35, 40, 60, 70, 55, 75],
+                backgroundColor: "rgba(0, 156, 255, .5)"
+            },
+            {
+                label: "AU",
+                data: [12, 25, 45, 55, 65, 70, 60],
+                backgroundColor: "rgba(0, 156, 255, .3)"
+            }
+            ]
+        },
         options: {
             responsive: true
         }
@@ -104,24 +104,24 @@ console.log('sadsd')
         data: {
             labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
             datasets: [{
-                    label: "Salse",
-                    data: [15, 30, 55, 45, 70, 65, 85],
-                    backgroundColor: "rgba(0, 156, 255, .5)",
-                    fill: true
-                },
-                {
-                    label: "Revenue",
-                    data: [99, 135, 170, 130, 190, 180, 270],
-                    backgroundColor: "rgba(0, 156, 255, .3)",
-                    fill: true
-                }
-            ]
+                label: "Salse",
+                data: [15, 30, 55, 45, 70, 65, 85],
+                backgroundColor: "rgba(0, 156, 255, .5)",
+                fill: true
             },
+            {
+                label: "Revenue",
+                data: [99, 135, 170, 130, 190, 180, 270],
+                backgroundColor: "rgba(0, 156, 255, .3)",
+                fill: true
+            }
+            ]
+        },
         options: {
             responsive: true
         }
     });
-    
+
 
 
     // Single Line Chart
@@ -212,36 +212,36 @@ console.log('sadsd')
     });
 
     const button = document.querySelector("button"),
-  toast = document.querySelector(".toast");
-(closeIcon = document.querySelector(".close")),
-  (progress = document.querySelector(".progress"));
+        toast = document.querySelector(".toast");
+    (closeIcon = document.querySelector(".close")),
+        (progress = document.querySelector(".progress"));
 
-let timer1, timer2;
+    let timer1, timer2;
 
-button.addEventListener("click", () => {
-  toast.classList.add("active");
-  progress.classList.add("active");
+    button.addEventListener("click", () => {
+        toast.classList.add("active");
+        progress.classList.add("active");
 
-  timer1 = setTimeout(() => {
-    toast.classList.remove("active");
-  }, 5000); //1s = 1000 milliseconds
+        timer1 = setTimeout(() => {
+            toast.classList.remove("active");
+        }, 5000); //1s = 1000 milliseconds
 
-  timer2 = setTimeout(() => {
-    progress.classList.remove("active");
-  }, 5300);
-});
+        timer2 = setTimeout(() => {
+            progress.classList.remove("active");
+        }, 5300);
+    });
 
-closeIcon.addEventListener("click", () => {
-  toast.classList.remove("active");
+    closeIcon.addEventListener("click", () => {
+        toast.classList.remove("active");
 
-  setTimeout(() => {
-    progress.classList.remove("active");
-  }, 300);
+        setTimeout(() => {
+            progress.classList.remove("active");
+        }, 300);
 
-  clearTimeout(timer1);
-  clearTimeout(timer2);
-});
-console.log('sadsd')
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+    });
+    console.log('sadsd')
 
 });
 

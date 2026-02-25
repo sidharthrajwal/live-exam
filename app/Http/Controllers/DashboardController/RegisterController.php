@@ -38,7 +38,8 @@ class RegisterController extends Controller
         try {
         $save_data->save();
         Auth::login($save_data);
-        return redirect()->route('login');
+
+        return redirect()->route('login')->with('success', 'User registered successfully! please login');
 
     } catch(\Illuminate\Database\QueryException $e){
     

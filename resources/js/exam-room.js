@@ -17,7 +17,7 @@ async function loadNextQuestion(index) {
   });
 
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
 
   if (data.current_question !== null) {
 
@@ -75,4 +75,41 @@ $('.change-question').on('click', function (e) {
   e.preventDefault();
   idx = Number($(this).data('index')) || 0;
   loadNextQuestion(idx);
+});
+
+
+$('#examCodeForm').on('submit', async function (e) {
+
+  e.preventDefault();
+
+  const examCode = $('#examCodeInput').val();
+
+  const response = await fetch('/join-slot', {
+
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    body: JSON.stringify({
+      exam_code: examCode
+    })
+
+  });
+  const data = await response.json();
+  if (data.status === 'success') {
+    $('#status-msg').text(data.message);
+    setTimeout(() => {
+      $('#status-msg').text('');
+    }, 1000);
+    window.location.href = '/examroom';
+  }
+  else if (data.status === 'warning') {
+    $('#status-msg').show();
+    $('#status-msg').text(data.message);
+
+    setTimeout(() => {
+      $('#status-msg').hide();
+    }, 1000);
+  }
 });

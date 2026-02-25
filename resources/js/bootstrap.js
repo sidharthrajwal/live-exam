@@ -13,12 +13,13 @@ import Echo from 'laravel-echo';
 
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
-
+const examIdnew = document.getElementById('exam-timer')?.dataset.examId;
 if (Echo) {
     console.log('Echo initialized', window.Echo);
 
 
 }
+
 
 window.Echo = new Echo({
     broadcaster: 'reverb',
@@ -33,11 +34,28 @@ console.log('Echo CREATED', window.Echo);
 
 
 
-window.Echo.channel('test')
+
+window.Echo.channel('exam.' + examIdnew)
     .listen('.livescore', (e) => {
+        console.log('LiveScore details', e);
+
         document.getElementById('liveScore').textContent = e.livescore;
 
-        console.log('Live score received:', e.livescore);
+        if (e.topThree && e.topThree.length) {
+
+            let html = '';
+
+            e.topThree.forEach((student, index) => {
+                html += `
+            <li>
+                ${student.name}
+                <span>${student.score}</span>
+            </li>
+        `;
+            });
+
+            $('.top-three-list').html(html);
+        }
     });
 
 

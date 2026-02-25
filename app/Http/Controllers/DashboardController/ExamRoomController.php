@@ -20,10 +20,12 @@ class ExamRoomController extends Controller
 {
 
     protected $correct_answer;
+   
     public $joined_subjects;
     public $examId;
     public $exam_room;
     public $livescore;
+    public array $topThreeStudent;
 
     public array $remarkedQuestion;
 
@@ -39,16 +41,18 @@ class ExamRoomController extends Controller
         }
 
         $this->exam_room = ExamRoom::where('user_id', $student_id)->first();
+        
     }
 
     public function index()
     {
+     
         $examroom = ExamRoom::where('user_id', auth()->id())->first();
-        // dd($examroom);
+        
         if ($examroom == null) {
             return redirect()->route('join-slot');
         }
-            $this->examId = $this->exam_room->exam_id;
+            $this->examId = $examroom->exam_id;
 
         $questions = Questions::with(['answers' => function ($query) {
             $query->select('id', 'question_id', 'option_value', 'c_answer');
@@ -84,9 +88,11 @@ class ExamRoomController extends Controller
            
             $exam = ExamList::find($this->examId);
 
+           
             if ($exam) {
                 $exam_room_code = $exam->subject_code;
                 $questions = Questions::with('answers')->where('exam_id', $this->examId)->select('id','question')->first();
+                 //dd($exam);
                 $question_id = $questions->id;
                 $question_title = $questions->question;
               
@@ -99,6 +105,7 @@ class ExamRoomController extends Controller
                 $questionCount = Questions::get()->where('exam_id', $this->examId)->all();
             }
         }
+         $filterData = $this->filterScore($examroom->exam_id, $examroom->end_time);
 
         return view('Dashboard.Exam.students-exam', compact(
             'joined_subjects',
@@ -116,9 +123,11 @@ class ExamRoomController extends Controller
             'question_title',
             'exam_room_total_questions',
             'exam_room_id',
-            'livescore'
+            'livescore',
+            'filterData'
             
         ));
+        
     }
 public function ChangeQuestions(Request $request)
 {
@@ -143,7 +152,7 @@ public function ChangeQuestions(Request $request)
     }
 
     $questions = json_decode($questions, true);
-  //  dd($questions);
+ 
 
     if (!isset($questions[$index])) {
         return response()->json([
@@ -208,7 +217,7 @@ public function ChangeQuestions(Request $request)
         );
 
        $examRoom->update(['is_marked' => $updatedList]);
-    
+     $this->filterScore($examRoom->exam_id, $examRoom->end_time);
         return response()->json([
             'remark_added' => true,
             'marked_questions' => $updatedList,
@@ -216,8 +225,45 @@ public function ChangeQuestions(Request $request)
         ]);
     }
     
+
+public function filterScore($examId, $endtime)
+{
+    $topThreeStudent = []; 
+
+    $topStudent = ExamRoom::with('user:id,name')
+        ->where('exam_id', $examId)
+        ->where('score', '>', 0)
+        ->orderByDesc('score')
+        ->orderByRaw('COALESCE(JSON_LENGTH(is_saved),0) DESC')
+        ->orderByRaw('COALESCE(JSON_LENGTH(is_marked),0) ASC')
+        ->limit(3)
+        ->get();
+
+    foreach ($topStudent as $student) {
+        $topThreeStudent[] = [
+            'name'  => $student->user->name,
+            'score' => $student->score,
+        ];
+    }
+
+    $currentScore = ExamRoom::where('user_id', auth()->id())
+        ->where('exam_id', $examId)
+        ->first();
+
+    if ($topStudent->isNotEmpty() && $currentScore) {
+        broadcast(new LiveScore(
+            $currentScore->score,
+            $topThreeStudent,
+            $examId
+        ))->toOthers();
+    }
+
+    return $topThreeStudent;
+}
+
 public function SaveAnswer(Request $request, ExamRoom $examRoom)
 {
+   
     $questionId = (int) $request->question_id;
     $selectedOptionId = (int) $request->option_id;
 
@@ -271,11 +317,11 @@ public function SaveAnswer(Request $request, ExamRoom $examRoom)
         'current_score'   => (int) $examRoom->score,
     ]);
 
-    if($response){
-        $livescore = new livescore($examRoom->score);
-        broadcast($livescore)->toOthers();
-    }
-    return $response;
+    $this->filterScore($examRoom->exam_id, $examRoom->end_time);
+
+
+   
+    return $response;   
 
   
     
@@ -305,4 +351,8 @@ public function SaveAnswer(Request $request, ExamRoom $examRoom)
         return [$list, $view];
     }
     
+
+
+
 }
+

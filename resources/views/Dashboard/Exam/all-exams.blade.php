@@ -79,7 +79,7 @@
                                                 <span class="badge bg-primary me-3"><i class="fa fa-bolt"></i></span>
                                                 <div>
                                                     <div class="fw-semibold">{{ $exam->subject_name }}</div>
-                                                    <small class="text-muted">Code: {{ $exam->subject_code }}</small>
+                                                    <small class="text-muted" data-subject-code="{{ $exam->subject_code }}">Code: {{ $exam->subject_code }}</small>
                                                 </div>
                                             </div>
                                         </td>
@@ -110,7 +110,7 @@
                                    
                                 </tbody>
                             </table>
-
+  
         <!-- Enter Exam Code Modal -->
          <form  id="examCodeForm" method="POST">
             @csrf
@@ -121,15 +121,16 @@
             <div class="modal-dialog modal-dialog-centered">
             
                 <div class="modal-content">
-                <span id="status-msg"></span>
+           
                     <div class="modal-header">
                         <h6 class="modal-title">Enter Exam Code</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                         <span id="status-msg"></span>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="examCodeInput" class="form-label">Exam Code</label>
-                            <input type="text" name="exam_code" id="examCodeInput" class="form-control" placeholder="Enter your exam code" />
+                            <input type="text" name="exam_code" id="examCodeInput" class="form-control" value="{{ $exam->exam_room_code }}" placeholder="Enter your exam code" />
                         </div>
                     </div>
                     <div class="modal-footer">

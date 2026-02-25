@@ -114,11 +114,11 @@
 
                                 <div class="card mb-3">
                                     <div class="card-body">
-                                    <span>Live Score: <span id="liveScore">{{$livescore}}</span></span>
-                                 <ul>
-                                <li>First person score: <span id="firstAttempt">0</span></li>    
-                                <li>Second person score: <span id="secondAttempt">0</span></li>
-                                <li>Third person score: <span id="thirdAttempt">0</span></li>
+                                    <span class="live-score">Your Score: <span id="liveScore">{{$livescore}}</span></span>
+                                 <ul class="top-three-list">
+                               @foreach ($filterData as $student)
+                               <li>{{$student['name']}} - {{$student['score']}}</li>
+                               @endforeach
                                     </ul>
                                     </div>
                                 </div>
@@ -171,22 +171,18 @@
                                     <button id="submit_exam" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#submitExamModal"><i class="fa fa-paper-plane me-2"></i>Submit Exam</button>
                                 </div>
                             </div>
-
-
-
    <x-question-count 
     :savedquestion="$saved_question" 
     :remarked-question="$remarkedQuestion"
     :question-count="$questionCount" 
 />
-
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
+    
+  
         <!-- Leave Exam Modal -->
         <div class="modal fade" id="leaveExamModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -208,10 +204,15 @@
                 </form>
             </div>
         </div>
+        
 
+
+   
         <!-- Submit Exam Modal -->
         <div class="modal fade" id="submitExamModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
+                  <form id="finalSubmitForm" action="{{ route('final-submit') }}" method="POST">
+                @csrf
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title">Submit Exam?</h6>
@@ -222,9 +223,10 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Review Again</button>
-                        <button type="button" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
+            </form>
             </div>
         </div>
     @endif

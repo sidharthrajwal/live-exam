@@ -528,15 +528,52 @@ h2#question {
   font-size: larger;
 }
 
-.heading-container
-{
+.heading-container {
 
   display: flex;
-    flex: 0 0 auto;
-    gap: 11px;
+  flex: 0 0 auto;
+  gap: 11px;
 }
 
-.qus-count
-{
-  font-weight:700;
+.qus-count {
+  font-weight: 700;
+}
+
+
+span#status-msg {
+  display: none;
+  background: beige;
+  color: red;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+}
+
+span.live-score {
+  padding: 2px;
+  background: yellow;
+  font-weight: bolder;
+  padding-inline: 17px;
+  padding-block: 3px;
+  color: red;
+  border: 1px solid rgb(112, 112, 112);
+  border-radius: 5px;
+}
+
+ul.top-three-list li:nth-child(1) {
+  color: green;
+  font-weight: 900;
+}
+
+ul.top-three-list li:nth-child(2) {
+  color: rgb(204 113 0);
+  font-weight: 900;
+}
+
+ul.top-three-list li:nth-child(3) {
+  color: rgb(255, 9, 9);
+  font-weight: 900;
+}
+
+ul.top-three-list {
+  padding-block: 25px;
 }

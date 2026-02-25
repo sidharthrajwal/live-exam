@@ -18,7 +18,6 @@ $('#submit_answer').on('click', function (e) {
     const index = $('h2#question').attr('data-question-index');
     const question_id = $('h2#question').attr('data-question-id');
 
-
     const option_id = $('input[name="answer"]:checked').attr('data-opt-id') || null;
 
     const examCode = $(this).data('exam-code');
@@ -36,13 +35,7 @@ async function marksaveQuestion(currentValue, exam_code, index, option_id, quest
 
     try {
 
-        console.log('exam code' + exam_code);
 
-        console.log('index' + index);
-
-        console.log('option_id' + option_id);
-
-        console.log('question_id' + question_id);
 
 
         const response = await fetch('/examroom/submit-answer', {
@@ -56,8 +49,20 @@ async function marksaveQuestion(currentValue, exam_code, index, option_id, quest
 
 
         response.json().then(data => {
-            if (data.remark_added == true) {
-                console.log('sadasds');
+            // console.log(data.question_saved);
+            if (data.remark_added === true) {
+                console.log(index);
+
+                $(`.qustion-navigator button[data-index="${index}"]`)
+                    .addClass('active-marked')
+                    .removeClass('active-saved');
+
+            } else if (data.question_saved === true) {
+                console.log(index);
+
+                $(`.qustion-navigator button[data-index="${index}"]`)
+                    .removeClass('active-marked')
+                    .addClass('active-saved');
             }
             $('#alert-wrapper').html(data.error_view);
 
@@ -88,3 +93,5 @@ $('#submit_exam').on('click', function (e) {
     e.preventDefault();
     submitExam();
 });
+
+

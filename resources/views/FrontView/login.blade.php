@@ -19,6 +19,11 @@
               
                     <div id="flash-container" class="flash-container"></div>
                     <form id="loginform" action="{{ route('login') }}" method="post">
+                        @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                        @endif
                     @csrf
 
                     <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
@@ -26,7 +31,7 @@
                             <a href="index.html" class="">
                                 <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>Won Exam</h3>
                                  
-                                  <!-- <img src="{{ Vite::asset('resources/images/logo.png') }}" alt="Logo"> -->
+<img src="{{ asset('images/logo.png') }}" alt="Logo">
 
                             </a>
                             <h3>Sign In</h3>

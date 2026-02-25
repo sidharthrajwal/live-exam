@@ -64,9 +64,9 @@ public function handle()
         Log::info("Exam Start: {$examStart->format('H:i:s')}");
         Log::info("Current Time: {$now->format('H:i:s')}");
 
-$diff = $examStart->diffInSeconds($now, false); // can be negative
-if ($now->greaterThanOrEqualTo($examStart)
-    && $examRoom->examlivestatus !== 'running') {
+    $diff = $examStart->diffInSeconds($now, false);
+    if ($now->greaterThanOrEqualTo($examStart)
+        && $examRoom->examlivestatus !== 'running') {
 
             event(new ExamStarted($exam, 'exam started'));
             $examRoom->update(['examlivestatus' => 'running']);

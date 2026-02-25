@@ -16,14 +16,23 @@ class livescore implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $livescore;
+    public $topThree;
+    public $examId;
+
     /**
      * Create a new event instance.
      */
-    public function __construct($livescore)
+    public function __construct($livescore, $topThree = [], $examId)
     {
 
         Log::info('LiveScore Event Fired: ' . $livescore); 
+   Log::info('LiveScore Event Fired', [
+    'topThree' => $topThree
+]);
+        Log::info('LiveScore Event Fired: ' . $examId); 
         $this->livescore = $livescore;
+        $this->topThree = $topThree;
+        $this->examId = $examId;
     }
 
     /**
@@ -34,7 +43,7 @@ class livescore implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('test'),
+                 new Channel('exam.' . $this->examId),
         ];
     }
 
@@ -45,8 +54,10 @@ class livescore implements ShouldBroadcastNow
 
     public function broadcastWith()
     {
-        return [
+        return [    
             'livescore' => $this->livescore,
+            'topThree' => $this->topThree,
+            'examId' => $this->examId,
         ];
     }
 }

@@ -9,7 +9,7 @@
              <span class="badge bg-warning text-dark">Marked</span>
          </div>
      </div>
-     <div class="row g-2">
+     <div class="row g-2 qustion-navigator">
 
    @php $forcount = 1; @endphp
    @if(isset($questionCount))
